@@ -23,12 +23,12 @@
 
     <parent>
         <groupId>org.wso2.extension.siddhi.execution</groupId>
-        <artifactId>siddhi-execution-geo-parent</artifactId>
+        <artifactId>siddhi-gpl-execution-geo-parent</artifactId>
         <version>3.1.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>siddhi-execution-geo</artifactId>
+    <artifactId>siddhi-gpl-execution-geo</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Siddhi Execution Extension - Geo</name>
     <url>http://wso2.org</url>
@@ -88,7 +88,7 @@
             <artifactId>siddhi-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
+            <groupId>org.apache.log4j.wso2</groupId>
             <artifactId>log4j</artifactId>
         </dependency>
         <dependency>
