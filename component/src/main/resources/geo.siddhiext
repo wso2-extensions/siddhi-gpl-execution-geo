@@ -15,12 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-within=org.wso2.extension.siddhi.execution.geo.function.GeoWithinFunctionExecutor
-intersects=org.wso2.extension.siddhi.execution.geo.function.GeoIntersectsFunctionExecutor
-withinDistance=org.wso2.extension.siddhi.execution.geo.function.GeoWithinDistanceFunctionExecutor
-crosses=org.wso2.extension.siddhi.execution.geo.stream.GeoCrossesStreamProcessor
-proximity=org.wso2.extension.siddhi.execution.geo.stream.GeoProximityStreamProcessor
-stationary=org.wso2.extension.siddhi.execution.geo.stream.GeoStationaryStreamProcessor
-closestPoints=org.wso2.extension.siddhi.execution.geo.stream.function.GeoClosestPointsStreamFunctionProcessor
-locationApproximate=org.wso2.extension.siddhi.execution.geo.stream.GeoLocationApproximateStreamProcessor
-distance=org.wso2.extension.siddhi.execution.geo.function.GeoDistanceFunctionExecutor
+within=org.wso2.extension.siddhi.gpl.execution.geo.function.GeoWithinFunctionExecutor
+intersects=org.wso2.extension.siddhi.gpl.execution.geo.function.GeoIntersectsFunctionExecutor
+withinDistance=org.wso2.extension.siddhi.gpl.execution.geo.function.GeoWithinDistanceFunctionExecutor
+crosses=org.wso2.extension.siddhi.gpl.execution.geo.stream.GeoCrossesStreamProcessor
+proximity=org.wso2.extension.siddhi.gpl.execution.geo.stream.GeoProximityStreamProcessor
+stationary=org.wso2.extension.siddhi.gpl.execution.geo.stream.GeoStationaryStreamProcessor
+closestPoints=org.wso2.extension.siddhi.gpl.execution.geo.stream.function.GeoClosestPointsStreamFunctionProcessor
+locationApproximate=org.wso2.extension.siddhi.gpl.execution.geo.stream.GeoLocationApproximateStreamProcessor
+distance=org.wso2.extension.siddhi.gpl.execution.geo.function.GeoDistanceFunctionExecutor
