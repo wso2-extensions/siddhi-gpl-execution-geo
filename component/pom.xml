@@ -126,10 +126,21 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
+                            com.google.gson.*,
+                            com.vividsolutions.*,
+                            javax.media.jai.*,
+                            org.geotools.*,
+                            org.jdom.*,
+                            org.json.simple.*,
                             org.wso2.extension.siddhi.gpl.execution.geo.internal.*
                         </Private-Package>
                         <Export-Package>
-                            org.wso2.extension.siddhi.gpl.execution.geo,
+                            !com.google.gson.*,
+                            !com.vividsolutions.*,
+                            !javax.media.jai.*,
+                            !org.geotools.*,
+                            !org.jdom.*,
+                            !org.json.simple.*,
                             org.wso2.extension.siddhi.gpl.execution.geo.*
                         </Export-Package>
                         <Import-Package>
