@@ -21,24 +21,39 @@ package org.wso2.extension.siddhi.gpl.execution.geo.stream;
 import com.vividsolutions.jts.geom.Geometry;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.GeoOperation;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.WithinDistanceOperation;
-import org.wso2.siddhi.core.config.ExecutionPlanContext;
+import org.wso2.siddhi.annotation.Example;
+import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.ComplexEvent;
 import org.wso2.siddhi.core.event.ComplexEventChunk;
 import org.wso2.siddhi.core.event.stream.StreamEvent;
 import org.wso2.siddhi.core.event.stream.StreamEventCloner;
 import org.wso2.siddhi.core.event.stream.populater.ComplexEventPopulater;
-import org.wso2.siddhi.core.exception.ExecutionPlanCreationException;
+import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.query.processor.Processor;
 import org.wso2.siddhi.core.query.processor.stream.StreamProcessor;
+import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.query.api.definition.AbstractDefinition;
 import org.wso2.siddhi.query.api.definition.Attribute;
 import org.wso2.siddhi.query.api.definition.Attribute.Type;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Calculating the geo stationary
+ **/
+
+@Extension(
+        name = "stationary",
+        namespace = "geo",
+        description = "Geo stationary Stream function",
+        examples = @Example(description = "TBD", syntax = "TBD")
+)
 public class GeoStationaryStreamProcessor extends StreamProcessor {
 
     private GeoOperation geoOperation;
@@ -50,15 +65,16 @@ public class GeoStationaryStreamProcessor extends StreamProcessor {
      *
      * @param inputDefinition              the incoming stream definition
      * @param attributeExpressionExecutors the executors of each function parameters
-     * @param executionPlanContext         the context of the execution plan
+     * @param siddhiAppContext             the context of the execution plan
      * @return the additional output attributes introduced by the function
      */
     @Override
-    protected List<Attribute> init(AbstractDefinition inputDefinition, ExpressionExecutor[] attributeExpressionExecutors, ExecutionPlanContext executionPlanContext) {
+    protected List<Attribute> init(AbstractDefinition inputDefinition, ExpressionExecutor[]
+            attributeExpressionExecutors, ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
         geoOperation = new WithinDistanceOperation();
         geoOperation.init(attributeExpressionExecutors, 1, attributeExpressionLength - 1);
         if (attributeExpressionExecutors[attributeExpressionLength - 1].getReturnType() != Type.DOUBLE) {
-            throw new ExecutionPlanCreationException("Last parameter should be a double");
+            throw new SiddhiAppCreationException("Last parameter should be a double");
         }
         radius = (Double) attributeExpressionExecutors[attributeExpressionLength - 1].execute(null);
         ArrayList<Attribute> attributeList = new ArrayList<Attribute>(1);
@@ -92,8 +108,8 @@ public class GeoStationaryStreamProcessor extends StreamProcessor {
      * @return stateful objects of the element as an array
      */
     @Override
-    public Object[] currentState() {
-        return new Object[0];
+    public Map<String, Object> currentState() {
+        return new HashMap<String, Object>();
     }
 
     /**
@@ -104,12 +120,13 @@ public class GeoStationaryStreamProcessor extends StreamProcessor {
      *              the same order provided by currentState().
      */
     @Override
-    public void restoreState(Object[] state) {
+    public void restoreState(Map<String, Object> state) {
 
     }
 
     @Override
-    protected void process(ComplexEventChunk<StreamEvent> streamEventChunk, Processor nextProcessor, StreamEventCloner streamEventCloner, ComplexEventPopulater complexEventPopulater) {
+    protected void process(ComplexEventChunk<StreamEvent> streamEventChunk, Processor nextProcessor,
+                           StreamEventCloner streamEventCloner, ComplexEventPopulater complexEventPopulater) {
         while (streamEventChunk.hasNext()) {
             ComplexEvent complexEvent = streamEventChunk.next();
 
@@ -120,16 +137,19 @@ public class GeoStationaryStreamProcessor extends StreamProcessor {
             Geometry currentGeometry = geoOperation.getCurrentGeometry(data);
             String id = attributeExpressionExecutors[0].execute(complexEvent).toString();
             Geometry previousGeometry = map.get(id);
+
             if (previousGeometry == null) {
                 currentGeometry.setUserData(false);
-                map.put(id, currentGeometry);
+                map.putIfAbsent(id, currentGeometry);
                 streamEventChunk.remove();
                 continue;
-            }
-            boolean stationary = (Boolean) geoOperation.operation(currentGeometry, previousGeometry, new Object[]{radius});
 
-            if((Boolean)previousGeometry.getUserData()) {
-                if(!stationary) {
+            }
+            boolean stationary = (Boolean) geoOperation.operation(currentGeometry,
+                    previousGeometry, new Object[]{radius});
+
+            if ((Boolean) previousGeometry.getUserData()) {
+                if (!stationary) {
                     //alert out
                     complexEventPopulater.populateComplexEvent(complexEvent, new Object[]{stationary});
                     currentGeometry.setUserData(stationary);

@@ -21,15 +21,14 @@
     <parent>
         <groupId>org.wso2.extension.siddhi.gpl.execution.geo</groupId>
         <artifactId>siddhi-gpl-execution-geo-parent</artifactId>
-        <version>3.1.3-SNAPSHOT</version>
+        <version>3.2.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>siddhi-gpl-execution-geo-feature</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 Siddhi Execution Extension - Geo Feature</name>
-    <url>http://wso2.org</url>
-    <description>This feature contains Siddhi extension feature for Geo.</description>
+    <name>Siddhi Execution Extension - Geo Feature</name>
+    <description>This feature contains Siddhi extension feature for Geo.kk</description>
 
     <dependencies>
         <dependency>
@@ -72,4 +71,9 @@
             </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <text.mapper.version>4.0.0-M4</text.mapper.version>
+        <mavan.findbugsplugin.exclude.file>../findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
+    </properties>
 </project>

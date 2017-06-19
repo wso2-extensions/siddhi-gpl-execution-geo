@@ -22,6 +22,9 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import org.wso2.siddhi.query.api.definition.Attribute;
 
+/**
+ * check whether the given area is within the another area
+ * **/
 public class WithinOperation extends GeoOperation {
     @Override
     public Object operation(Geometry a, Geometry b, Object[] data) {

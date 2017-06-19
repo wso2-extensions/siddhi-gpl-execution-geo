@@ -20,11 +20,18 @@
 package org.wso2.extension.siddhi.gpl.execution.geo.function;
 
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.GeoOperation;
-import org.wso2.siddhi.core.config.ExecutionPlanContext;
+import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.executor.function.FunctionExecutor;
+import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.query.api.definition.Attribute.Type;
 
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Parent class for the geo operations
+ **/
 public abstract class AbstractGeoOperationExecutor extends FunctionExecutor {
 
     GeoOperation geoOperation;
@@ -33,12 +40,16 @@ public abstract class AbstractGeoOperationExecutor extends FunctionExecutor {
      * The initialization method for FunctionExecutor, this method will be called before the other methods
      *
      * @param attributeExpressionExecutors are the executors of each function parameters
-     * @param executionPlanContext         the context of the execution plan
+     * @param siddhiAppContext             the context of the execution plan
      */
+
     @Override
-    protected void init(ExpressionExecutor[] attributeExpressionExecutors, ExecutionPlanContext executionPlanContext) {
+    protected void init(ExpressionExecutor[] attributeExpressionExecutors,
+                        ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
         this.geoOperation.init(attributeExpressionExecutors, 0, attributeExpressionExecutors.length);
     }
+
+
     /**
      * The main executions method which will be called upon event arrival
      *
@@ -89,8 +100,8 @@ public abstract class AbstractGeoOperationExecutor extends FunctionExecutor {
      * @return stateful objects of the element as an array
      */
     @Override
-    public Object[] currentState() {
-        return new Object[0];
+    public Map<String, Object> currentState() {
+        return new HashMap<String, Object>();
     }
 
     /**
@@ -101,7 +112,7 @@ public abstract class AbstractGeoOperationExecutor extends FunctionExecutor {
      *              the same order provided by currentState().
      */
     @Override
-    public void restoreState(Object[] state) {
+    public void restoreState(Map<String, Object> state) {
 
     }
 

@@ -18,48 +18,58 @@
 
 package org.wso2.extension.siddhi.gpl.execution.geo.stream;
 
-import org.wso2.siddhi.core.config.ExecutionPlanContext;
-import org.wso2.siddhi.core.exception.ExecutionPlanRuntimeException;
+import org.wso2.siddhi.annotation.Example;
+import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.core.config.SiddhiAppContext;
+import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.query.processor.stream.function.StreamFunctionProcessor;
+import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.query.api.definition.AbstractDefinition;
 import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.exception.ExecutionPlanValidationException;
+import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * geoLocationApproximate(locationRecorder, latitude, longitude, sensorProximity, sensorUUID, sensorWeight, timestamp)
- *
+ * <p>
  * This method computed the average location of the locationRecorder using the collection iBeacons which the location
  * recorder resides.
- *
+ * <p>
  * locationRecorder - unique id of the object or item
  * latitude         - latitude value of the iBeacon
  * longitude        - longitude value of the iBeacon
  * sensorProximity  - proximity which will be given by the iBeacon (eg: ENTER, RANGE, EXIT)
  * sensorUUID       - unique id of the iBeacon
  * sensorWeight     - weight of the iBeacon which influence the averaging of the location (eg: approximate distance from
- *                    the beacon
+ * the beacon
  * timestamp        - timestamp of the log which will be used to remove iBeacon from one's collection when there is no
- *                    new log for 5 minutes
- *
+ * new log for 5 minutes
+ * <p>
  * Accept Type(s) for geoLocationApproximate(locationRecorder, latitude, longitude, sensorProximity, sensorUUID,
- *                                          sensorWeight, timestamp);
- *  locationRecorder : STRING
- *  latitude : DOUBLE
- *  longitude : DOUBLE
- *  sensorProximity : STRING
- *  sensorUUID : STRING
- *  sensorWeight : DOUBLE
- *  timestamp : LONG
- *
+ * sensorWeight, timestamp);
+ * locationRecorder : STRING
+ * latitude : DOUBLE
+ * longitude : DOUBLE
+ * sensorProximity : STRING
+ * sensorUUID : STRING
+ * sensorWeight : DOUBLE
+ * timestamp : LONG
+ * <p>
  * Return Type(s): DOUBLE, DOUBLE, BOOL
- *
  */
+@Extension(
+        name = "locationApproximate",
+        namespace = "geo",
+        description = "Geo Location Approximation",
+        examples = @Example(description = "TBD", syntax = "TBD")
+
+)
 public class GeoLocationApproximateStreamProcessor extends StreamFunctionProcessor {
 
     //locationRecorder,uuid -> BeaconValueHolder
@@ -76,45 +86,52 @@ public class GeoLocationApproximateStreamProcessor extends StreamFunctionProcess
 
     }
 
+
     @Override
-    public Object[] currentState() {
-        return new Object[]{personSpecificRecordLocatorMaps};
+    public Map<String, Object> currentState() {
+        return new HashMap<String, Object>() {
+            {
+                put("personSpecificRecordLocatorMaps", personSpecificRecordLocatorMaps);
+            }
+        };
     }
 
     @Override
-    public void restoreState(Object[] state) {
-        personSpecificRecordLocatorMaps = (Map<String, Map<String, BeaconValueHolder>>) state[0];
+    public void restoreState(Map<String, Object> state) {
+        personSpecificRecordLocatorMaps = (Map<String, Map<String, BeaconValueHolder>>)
+                state.get("personSpecificRecordLocatorMaps");
+
     }
 
     @Override
     protected Object[] process(Object[] data) {
         if (data[0] == null) {
-            throw new ExecutionPlanRuntimeException("Invalid input given to geo:locationApproximate() " +
-                                                    "function. First argument should be string");
+            throw new SiddhiAppRuntimeException("Invalid input given to geo:locationApproximate() " +
+                    "function. First argument should be string");
         }
         if (data[1] == null) {
-            throw new ExecutionPlanRuntimeException("Invalid input given to geo:locationApproximate() " +
-                                                    "function. Second argument should be double");
+            throw new SiddhiAppRuntimeException("Invalid input given to geo:locationApproximate() " +
+                    "function. Second argument should be double");
         }
         if (data[2] == null) {
-            throw new ExecutionPlanRuntimeException("Invalid input given to geo:locationApproximate() " +
-                                                    "function. Third argument should be double");
+            throw new SiddhiAppRuntimeException("Invalid input given to geo:locationApproximate() " +
+                    "function. Third argument should be double");
         }
         if (data[3] == null) {
-            throw new ExecutionPlanRuntimeException("Invalid input given to geo:locationApproximate() " +
-                                                    "function. Forth argument should be string");
+            throw new SiddhiAppRuntimeException("Invalid input given to geo:locationApproximate() " +
+                    "function. Forth argument should be string");
         }
         if (data[4] == null) {
-            throw new ExecutionPlanRuntimeException("Invalid input given to geo:locationApproximate() " +
-                                                    "function. Fifth argument should be string");
+            throw new SiddhiAppRuntimeException("Invalid input given to geo:locationApproximate() " +
+                    "function. Fifth argument should be string");
         }
         if (data[5] == null) {
-            throw new ExecutionPlanRuntimeException("Invalid input given to geo:locationApproximate() " +
-                                                    "function. Sixth argument should be double");
+            throw new SiddhiAppRuntimeException("Invalid input given to geo:locationApproximate() " +
+                    "function. Sixth argument should be double");
         }
         if (data[6] == null) {
-            throw new ExecutionPlanRuntimeException("Invalid input given to geo:locationApproximate() " +
-                                                    "function. Seventh argument should be long");
+            throw new SiddhiAppRuntimeException("Invalid input given to geo:locationApproximate() " +
+                    "function. Seventh argument should be long");
         }
 
         String locationRecorder = (String) data[0];
@@ -153,7 +170,8 @@ public class GeoLocationApproximateStreamProcessor extends StreamFunctionProcess
         double sensorValues[][] = new double[noOfSensors][3];
         int actualNoOfSensors = 0;
         double totalWeight = 0;
-        for (Map.Entry<String, BeaconValueHolder> beaconLocation : personSpecificRecordLocatorMaps.get(locationRecorder).entrySet()) {
+        for (Map.Entry<String, BeaconValueHolder> beaconLocation : personSpecificRecordLocatorMaps
+                .get(locationRecorder).entrySet()) {
             BeaconValueHolder beaconValueHolder = beaconLocation.getValue();
             long prevTimestamp = beaconValueHolder.getLastUpdatedTime();
             if ((timestamp - prevTimestamp) > 300000) {
@@ -199,12 +217,13 @@ public class GeoLocationApproximateStreamProcessor extends StreamFunctionProcess
     @Override
     protected List<Attribute> init(AbstractDefinition inputDefinition,
                                    ExpressionExecutor[] attributeExpressionExecutors,
-                                   ExecutionPlanContext executionPlanContext) {
+                                   ConfigReader configReader,
+                                   SiddhiAppContext siddhiAppContext) {
         personSpecificRecordLocatorMaps = new ConcurrentHashMap<String, Map<String, BeaconValueHolder>>();
         if (attributeExpressionExecutors.length != 7) {
-            throw new ExecutionPlanValidationException("Invalid no of arguments passed to " +
-                                                       "geo:locationApproximate() function, " +
-                                                       "requires 7, but found " + attributeExpressionExecutors.length);
+            throw new SiddhiAppValidationException("Invalid no of arguments passed to " +
+                    "geo:locationApproximate() function, " +
+                    "requires 7, but found " + attributeExpressionExecutors.length);
         }
         ArrayList<Attribute> attributes = new ArrayList<Attribute>(3);
         attributes.add(new Attribute("averagedLatitude", Attribute.Type.DOUBLE));
@@ -213,13 +232,13 @@ public class GeoLocationApproximateStreamProcessor extends StreamFunctionProcess
         return attributes;
     }
 
-    private class BeaconValueHolder {
+    private static class BeaconValueHolder {
         private double latitude;
         private double longitude;
         private long lastUpdatedTime;
         private double beaconDistance;
 
-        public BeaconValueHolder(double latitude, double longitude, long lastUpdatedTime, double
+        BeaconValueHolder(double latitude, double longitude, long lastUpdatedTime, double
                 beaconDistance) {
             this.latitude = latitude;
             this.longitude = longitude;

@@ -22,7 +22,10 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
 import org.wso2.siddhi.query.api.definition.Attribute;
-
+/**
+ *
+ * return the nearest point.
+ * **/
 public class ClosestOperation extends GeoOperation {
     @Override
     public Object operation(Geometry a, Geometry b, Object[] data) {
