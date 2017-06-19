@@ -19,8 +19,8 @@
 package org.wso2.extension.siddhi.gpl.execution.geo.stream.function;
 
 import org.apache.log4j.Logger;
-import org.testng.annotations.Test;
 import org.testng.AssertJUnit;
+import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.gpl.execution.geo.GeoTestCase;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.event.Event;
