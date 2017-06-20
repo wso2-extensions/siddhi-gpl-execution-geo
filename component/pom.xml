@@ -19,18 +19,19 @@
 
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+
 
     <parent>
         <groupId>org.wso2.extension.siddhi.gpl.execution.geo</groupId>
         <artifactId>siddhi-gpl-execution-geo-parent</artifactId>
-        <version>4.0.0</version>
+        <version>4.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>siddhi-gpl-execution-geo</artifactId>
     <packaging>bundle</packaging>
-    <name>Siddhi Execution Extension - Geo</name>
+    <modelVersion>4.0.0</modelVersion>
+    <name>Siddhi GPL Execution Extension - Geo</name>
     <description>
         FunctionExecutors
         1.  GeoWithinFunctionExecutor
@@ -101,7 +102,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>6.8</version>
+            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -154,6 +155,7 @@
 
     <properties>
         <text.mapper.version>4.0.0-M5</text.mapper.version>
+        <testng.version>6.8</testng.version>
         <mavan.findbugsplugin.exclude.file>../findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
     </properties>
 </project>
