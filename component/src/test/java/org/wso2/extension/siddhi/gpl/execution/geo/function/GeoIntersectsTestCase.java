@@ -19,10 +19,10 @@
 package org.wso2.extension.siddhi.gpl.execution.geo.function;
 
 import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Test;
+import org.testng.AssertJUnit;
+import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.gpl.execution.geo.GeoTestCase;
-import org.wso2.siddhi.core.ExecutionPlanRuntime;
+import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 
@@ -37,7 +37,8 @@ public class GeoIntersectsTestCase extends GeoTestCase {
         expectedResult.clear();
         eventCount = 0;
 
-        data.add(new Object[]{"{'type':'Polygon','coordinates':[[[0.5, 0.5],[0.5, 1.5],[1.5, 1.5],[1.5, 0.5],[0.5, 0.5]]]}"});
+        data.add(new Object[]{"{'type':'Polygon','coordinates':[[[0.5, 0.5]," +
+                "[0.5, 1.5],[1.5, 1.5],[1.5, 0.5],[0.5, 0.5]]]}"});
         expectedResult.add(true);
         data.add(new Object[]{"{'type':'Circle','coordinates':[-1, -1], 'radius':221148}"});
         expectedResult.add(true);
@@ -46,28 +47,30 @@ public class GeoIntersectsTestCase extends GeoTestCase {
         data.add(new Object[]{"{'type':'Polygon','coordinates':[[[2, 2],[2, 1],[1, 1],[1, 2],[2, 2]]]}"});
         expectedResult.add(true);
 
-        String executionPlan = "@config(async = 'true') define stream dataIn (geometry string);"
+        String siddhiApp = "@config(async = 'true') define stream dataIn (geometry string);"
                 + "@info(name = 'query1') from dataIn" +
-                " select geo:intersects(geometry, \"{'type':'Polygon','coordinates':[[[0, 0],[0, 1],[1, 1],[1, 0],[0, 0]]]}\") as intersects \n" +
+                " select geo:intersects(geometry, \"{'type':'Polygon','coordinates':[[[0, 0]," +
+                "[0, 1],[1, 1],[1, 0],[0, 0]]]}\") as intersects \n" +
                 " insert into dataOut";
 
         long start = System.currentTimeMillis();
-        ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(executionPlan);
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(siddhiApp);
         long end = System.currentTimeMillis();
-        logger.info(String.format("Time to create ExecutionPlanRunTime: [%f sec]", ((end - start) / 1000f)));
-        executionPlanRuntime.addCallback("query1", new QueryCallback() {
+        logger.info(String.format("Time to create siddhiAppRuntime: [%f sec]", ((end - start) / 1000f)));
+        siddhiAppRuntime.addCallback("query1", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 for (Event event : inEvents) {
                     logger.info(event);
                     Boolean isWithin = (Boolean) event.getData(0);
-                    Assert.assertEquals(expectedResult.get(eventCount++), isWithin);
+                    AssertJUnit.assertEquals(expectedResult.get(eventCount++), isWithin);
                 }
             }
         });
-        executionPlanRuntime.start();
-        generateEvents(executionPlanRuntime);
+        siddhiAppRuntime.start();
+        generateEvents(siddhiAppRuntime);
         Thread.sleep(1000);
-        Assert.assertEquals(expectedResult.size(), eventCount);
+        AssertJUnit.assertEquals(expectedResult.size(), eventCount);
     }
 }
+

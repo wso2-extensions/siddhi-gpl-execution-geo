@@ -19,25 +19,26 @@
 package org.wso2.extension.siddhi.gpl.execution.geo.stream;
 
 import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Test;
-import org.wso2.siddhi.core.ExecutionPlanRuntime;
+import org.testng.AssertJUnit;
+import org.testng.annotations.Test;
+import org.wso2.extension.siddhi.gpl.execution.geo.GeoTestCase;
+import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
-import org.wso2.extension.siddhi.gpl.execution.geo.GeoTestCase;
 
 public class GeoStationaryTestCase extends GeoTestCase {
     private static Logger logger = Logger.getLogger(GeoStationaryTestCase.class);
+
     @Test
-     public void testStationary() throws Exception {
+    public void testStationary() throws Exception {
         logger.info("TestStationary");
 
         data.clear();
         expectedResult.clear();
         eventCount = 0;
 
-        data.add(new Object[]{"km-4354", 0d,  0d});
-        data.add(new Object[]{"km-4354", 1d,  1d});
+        data.add(new Object[]{"km-4354", 0d, 0d});
+        data.add(new Object[]{"km-4354", 1d, 1d});
         data.add(new Object[]{"km-4354", 1d, 1.5d});
         expectedResult.add(true);
         data.add(new Object[]{"km-4354", 1d, 1.75d});
@@ -50,27 +51,28 @@ public class GeoStationaryTestCase extends GeoTestCase {
         data.add(new Object[]{"km-4354", 1d, 3.6d});
         expectedResult.add(false);
 
-        String executionPlan = "@config(async = 'true') define stream dataIn (id string, longitude double, latitude double);"
+        String siddhiApp = "@config(async = 'true') " +
+                "define stream dataIn (id string, longitude double, latitude double);"
                 + "@info(name = 'query1') from dataIn#geo:stationary(id,longitude,latitude, 110574.61087757687) " +
                 "select stationary \n" +
                 "insert into dataOut";
 
         long start = System.currentTimeMillis();
-        ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(executionPlan);
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(siddhiApp);
         long end = System.currentTimeMillis();
-        logger.info(String.format("Time to create ExecutionPlanRunTime: [%f sec]", ((end - start) / 1000f)));
-        executionPlanRuntime.addCallback("query1", new QueryCallback() {
+        logger.info(String.format("Time to create siddhiAppRuntime: [%f sec]", ((end - start) / 1000f)));
+        siddhiAppRuntime.addCallback("query1", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 for (Event event : inEvents) {
                     Boolean isWithin = (Boolean) event.getData(0);
-                    Assert.assertEquals(expectedResult.get(eventCount++), isWithin);
+                    AssertJUnit.assertEquals(expectedResult.get(eventCount++), isWithin);
                 }
             }
         });
-        executionPlanRuntime.start();
-        generateEvents(executionPlanRuntime);
+        siddhiAppRuntime.start();
+        generateEvents(siddhiAppRuntime);
         Thread.sleep(1000);
-        Assert.assertEquals(expectedResult.size(), eventCount);
+        AssertJUnit.assertEquals(expectedResult.size(), eventCount);
     }
 }

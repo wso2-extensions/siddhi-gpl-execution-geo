@@ -19,9 +19,24 @@
 package org.wso2.extension.siddhi.gpl.execution.geo.function;
 
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.IntersectsOperation;
+import org.wso2.siddhi.annotation.Example;
+import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.ReturnAttribute;
+import org.wso2.siddhi.annotation.util.DataType;
 
+
+/**
+ * Calculate the geo intersection
+ **/
+@Extension(
+        name = "intersects",
+        namespace = "geo",
+        description = "Geo intersects function",
+        examples = @Example(description = "TBD", syntax = "TBD"),
+        returnAttributes = @ReturnAttribute(description = "Return type is boolean", type = {DataType.BOOL})
+)
 public class GeoIntersectsFunctionExecutor extends AbstractGeoOperationExecutor {
-    public GeoIntersectsFunctionExecutor(){
+    public GeoIntersectsFunctionExecutor() {
         this.geoOperation = new IntersectsOperation();
     }
 }

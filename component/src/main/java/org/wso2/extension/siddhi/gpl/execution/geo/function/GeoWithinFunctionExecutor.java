@@ -19,7 +19,21 @@
 package org.wso2.extension.siddhi.gpl.execution.geo.function;
 
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.WithinOperation;
+import org.wso2.siddhi.annotation.Example;
+import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.ReturnAttribute;
+import org.wso2.siddhi.annotation.util.DataType;
 
+/**
+ * Check whether the given geo area is within the defined area
+ **/
+@Extension(
+        name = "within",
+        namespace = "geo",
+        description = "Geo within function",
+        examples = @Example(description = "TBD", syntax = "TBD"),
+        returnAttributes = @ReturnAttribute(description = "Return type is boolean", type = {DataType.BOOL})
+)
 public class GeoWithinFunctionExecutor extends AbstractGeoOperationExecutor {
     public GeoWithinFunctionExecutor() {
         this.geoOperation = new WithinOperation();

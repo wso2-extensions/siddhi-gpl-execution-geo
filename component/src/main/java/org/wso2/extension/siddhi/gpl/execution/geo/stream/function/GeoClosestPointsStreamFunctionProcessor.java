@@ -21,21 +21,37 @@ package org.wso2.extension.siddhi.gpl.execution.geo.stream.function;
 import com.vividsolutions.jts.geom.Coordinate;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.ClosestOperation;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.GeoOperation;
-import org.wso2.siddhi.core.config.ExecutionPlanContext;
+import org.wso2.siddhi.annotation.Example;
+import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.query.processor.stream.function.StreamFunctionProcessor;
+import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.query.api.definition.AbstractDefinition;
 import org.wso2.siddhi.query.api.definition.Attribute;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * Find the closest geo point
+ **/
+@Extension(
+        name = "closestPoints",
+        namespace = "geo",
+        description = "Geo closest point stream function",
+        examples = @Example(description = "TBD", syntax = "TBD")
+)
 public class GeoClosestPointsStreamFunctionProcessor extends StreamFunctionProcessor {
 
     GeoOperation geoOperation;
 
     @Override
-    protected List<Attribute> init(AbstractDefinition abstractDefinition, ExpressionExecutor[] expressionExecutors, ExecutionPlanContext executionPlanContext) {
+    protected List<Attribute> init(AbstractDefinition abstractDefinition, ExpressionExecutor[] expressionExecutors,
+                                   ConfigReader configReader,
+                                   SiddhiAppContext siddhiAppContext) {
         this.geoOperation = new ClosestOperation();
         this.geoOperation.init(attributeExpressionExecutors, 0, attributeExpressionExecutors.length);
         List<Attribute> attributeList = new ArrayList<Attribute>(4);
@@ -55,7 +71,7 @@ public class GeoClosestPointsStreamFunctionProcessor extends StreamFunctionProce
 
     @Override
     protected Object[] process(Object o) {
-        return null;
+        return new Object[0];
     }
 
     @Override
@@ -69,12 +85,12 @@ public class GeoClosestPointsStreamFunctionProcessor extends StreamFunctionProce
     }
 
     @Override
-    public Object[] currentState() {
-        return new Object[0];
+    public Map<String, Object> currentState() {
+        return new HashMap<String, Object>();
     }
 
     @Override
-    public void restoreState(Object[] objects) {
+    public void restoreState(Map<String, Object> objects) {
 
     }
 }

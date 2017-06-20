@@ -21,7 +21,9 @@ package org.wso2.extension.siddhi.gpl.execution.geo.internal.util;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import org.wso2.siddhi.query.api.definition.Attribute;
-
+/**
+ * Find the intersection of 2 geometrical areas
+ * **/
 public class IntersectsOperation extends GeoOperation {
     @Override
     public Object operation(Geometry a, Geometry b, Object[] data) {

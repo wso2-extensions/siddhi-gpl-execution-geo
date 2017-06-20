@@ -32,14 +32,16 @@ import org.geotools.geometry.jts.JTSFactoryFinder;
 
 import java.io.IOException;
 import java.io.StringWriter;
-
+/**
+ * creating a geometry according to the given values
+ * **/
 public class GeometryUtils {
 
     public static final double TO_DEGREE = 110574.61087757687;
     private static final String COORDINATES = "coordinates";
     private static final String RADIUS = "radius";
     private static GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
-            //JTSFactoryFinder.getGeometryFactory(new Hints(Hints.CRS, DefaultGeographicCRS.WGS84));
+    //JTSFactoryFinder.getGeometryFactory(new Hints(Hints.CRS, DefaultGeographicCRS.WGS84));
     private static GeometryJSON geometryJSON = new GeometryJSON(10);
 
     public static Geometry geometryFromJSON(String strGeometry) {
@@ -73,15 +75,17 @@ public class GeometryUtils {
     public static PreparedGeometry preparedGeometryFromJSON(String strGeometry) {
         return PreparedGeometryFactory.prepare(geometryFromJSON(strGeometry));
     }
+
     public static Point createPoint(double longitude, double latitude) {
         return geometryFactory.createPoint(new Coordinate(longitude, latitude));
     }
-    public static Geometry createGeometry(Object data){
-        if(data instanceof Geometry) {
+
+    public static Geometry createGeometry(Object data) {
+        if (data instanceof Geometry) {
             return (Geometry) data;
-        }
-        else {
+        } else {
             return geometryFromJSON(data.toString());
         }
     }
 }
+

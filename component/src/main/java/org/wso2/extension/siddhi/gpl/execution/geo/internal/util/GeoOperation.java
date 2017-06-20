@@ -20,14 +20,16 @@ package org.wso2.extension.siddhi.gpl.execution.geo.internal.util;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
-import org.wso2.siddhi.core.exception.ExecutionPlanCreationException;
+import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.executor.ConstantExpressionExecutor;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.query.api.definition.Attribute;
-
+/**
+ * Operations related to the geometry
+ *
+ * **/
 public abstract class GeoOperation {
     public boolean point = false;
-    protected Object data;
     public PreparedGeometry geometry = null;
 
     public void init(ExpressionExecutor[] attributeExpressionExecutors, int start, int end) {
@@ -35,13 +37,13 @@ public abstract class GeoOperation {
         if (attributeExpressionExecutors[position].getReturnType() == Attribute.Type.DOUBLE) {
             point = true;
             if (attributeExpressionExecutors[position + 1].getReturnType() != Attribute.Type.DOUBLE) {
-                throw new ExecutionPlanCreationException("Longitude and Latitude must be provided as double values");
+                throw new SiddhiAppCreationException("Longitude and Latitude must be provided as double values");
             }
             ++position;
         } else if (attributeExpressionExecutors[position].getReturnType() == Attribute.Type.STRING) {
             point = false;
         } else {
-            throw new ExecutionPlanCreationException((position + 1) +
+            throw new SiddhiAppCreationException((position + 1) +
                     " parameter should be a string for a geometry or a double for a latitude");
         }
         ++position;
@@ -49,7 +51,7 @@ public abstract class GeoOperation {
             return;
         }
         if (attributeExpressionExecutors[position].getReturnType() != Attribute.Type.STRING) {
-            throw new ExecutionPlanCreationException((position + 1) + " parameter should be a GeoJSON geometry string");
+            throw new SiddhiAppCreationException((position + 1) + " parameter should be a GeoJSON geometry string");
         }
         if (attributeExpressionExecutors[position] instanceof ConstantExpressionExecutor) {
             String strGeometry = attributeExpressionExecutors[position].execute(null).toString();
@@ -90,3 +92,5 @@ public abstract class GeoOperation {
 
     public abstract Attribute.Type getReturnType();
 }
+
+

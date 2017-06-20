@@ -19,10 +19,10 @@
 package org.wso2.extension.siddhi.gpl.execution.geo.stream;
 
 import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Test;
+import org.testng.AssertJUnit;
+import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.gpl.execution.geo.GeoTestCase;
-import org.wso2.siddhi.core.ExecutionPlanRuntime;
+import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.util.EventPrinter;
@@ -62,7 +62,7 @@ public class GeoProximityTestCase extends GeoTestCase {
         map3.put("3", false);
         expectedResultList.add(map3);
 
-        String executionPlan = "@config(async = 'true')" +
+        String siddhiApp = "@config(async = 'true')" +
                 "define stream dataIn (id string, longitude double, latitude double);"
                 +
                 "@info(name = 'query1') " +
@@ -71,25 +71,25 @@ public class GeoProximityTestCase extends GeoTestCase {
                 "insert into dataOut";
 
         long start = System.currentTimeMillis();
-        ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(executionPlan);
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(siddhiApp);
         long end = System.currentTimeMillis();
-        logger.info(String.format("Time to create ExecutionPlanRunTime: [%f sec]", ((end - start) / 1000f)));
-        executionPlanRuntime.addCallback("query1", new QueryCallback() {
+        logger.info(String.format("Time to create siddhiAppRuntime: [%f sec]", ((end - start) / 1000f)));
+        siddhiAppRuntime.addCallback("query1", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
                     Boolean proximity = (Boolean) event.getData(0);
                     String other = (String) event.getData(1);
-                    Assert.assertTrue(expectedResultList.get(eventCount).containsKey(other));
-                    Assert.assertEquals(expectedResultList.get(eventCount).get(other), proximity);
+                    AssertJUnit.assertTrue(expectedResultList.get(eventCount).containsKey(other));
+                    AssertJUnit.assertEquals(expectedResultList.get(eventCount).get(other), proximity);
                 }
                 eventCount++;
             }
         });
-        executionPlanRuntime.start();
-        generateEvents(executionPlanRuntime);
+        siddhiAppRuntime.start();
+        generateEvents(siddhiAppRuntime);
         Thread.sleep(1000);
-        Assert.assertEquals(expectedResultList.size(), eventCount);
+        AssertJUnit.assertEquals(expectedResultList.size(), eventCount);
     }
 }

@@ -18,11 +18,11 @@
 
 package org.wso2.extension.siddhi.gpl.execution.geo.stream.function;
 
-import junit.framework.Assert;
 import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.wso2.siddhi.core.ExecutionPlanRuntime;
+import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
@@ -31,11 +31,11 @@ import org.wso2.siddhi.core.util.EventPrinter;
 
 
 public class AverageLocationTestCase {
-    static final Logger log = Logger.getLogger(AverageLocationTestCase.class);
+    private static final Logger log = Logger.getLogger(AverageLocationTestCase.class);
     private volatile int count;
     private volatile boolean eventArrived;
 
-    @Before
+    @BeforeMethod
     public void init() {
         count = 0;
         eventArrived = false;
@@ -46,7 +46,7 @@ public class AverageLocationTestCase {
         log.info("testAverageLocation with same weight TestCase");
         SiddhiManager siddhiManager = new SiddhiManager();
 
-        ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(
                 "@config(async = 'true') " +
                         "define stream cleanedStream (locationRecorder string, latitude double, longitude double, " +
                         "beaconProximity string, uuid string, weight double, timestamp long); " +
@@ -56,48 +56,50 @@ public class AverageLocationTestCase {
                         "select * " +
                         "insert into dataOut;");
 
-        executionPlanRuntime.addCallback("query1", new QueryCallback() {
+        siddhiAppRuntime.addCallback("query1", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
                     count++;
                     if (count == 1) {
-                        Assert.assertEquals(6.876657000000001, event.getData(7));
-                        Assert.assertEquals(79.897648, event.getData(8));
+                        AssertJUnit.assertEquals(6.876657000000001, event.getData(7));
+                        AssertJUnit.assertEquals(79.897648, event.getData(8));
                         eventArrived = true;
                     } else if (count == 2) {
-                        Assert.assertEquals(6.797727042508542, event.getData(7));
-                        Assert.assertEquals(80.13557409252783, event.getData(8));
+                        AssertJUnit.assertEquals(6.797727042508542, event.getData(7));
+                        AssertJUnit.assertEquals(80.13557409252783, event.getData(8));
                         eventArrived = true;
                     } else if (count == 3) {
-                        Assert.assertEquals(6.853572272662002, event.getData(7));
-                        Assert.assertEquals(true, 80.34826512892124 == (Double) event.getData(8) || 80.34826512892126 == (Double) event.getData(8));
+                        AssertJUnit.assertEquals(6.853572272662002, event.getData(7));
+                        AssertJUnit.assertEquals(true, 80.34826512892124 == (Double) event.getData(8) ||
+                                80.34826512892126 == (Double) event.getData(8));
                         eventArrived = true;
                     } else if (count == 4) {
-                        Assert.assertEquals(true, 8.026326160526303 == (Double) event.getData(7) || 8.0263261605263 == (Double) event.getData(7));
-                        Assert.assertEquals(80.42794459517538, event.getData(8));
+                        AssertJUnit.assertEquals(true, 8.026326160526303 == (Double) event.getData(7) ||
+                                8.0263261605263 == (Double) event.getData(7));
+                        AssertJUnit.assertEquals(80.42794459517538, event.getData(8));
                         eventArrived = true;
                     }
                 }
             }
         });
 
-        InputHandler inputHandler = executionPlanRuntime.getInputHandler("cleanedStream");
-        executionPlanRuntime.start();
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("cleanedStream");
+        siddhiAppRuntime.start();
         //nugegods, ratnapura, nuwara eliya, vavniya --> thbuttegama
-        inputHandler.send(new Object[]{"person1", 6.876657, 79.897648, "ENTER", "uuid1", 20.0d, 1452583935l});
+        inputHandler.send(new Object[]{"person1", 6.876657, 79.897648, "ENTER", "uuid1", 20.0d, 1452583935L});
         Thread.sleep(500);
-        inputHandler.send(new Object[]{"person1", 6.718681, 80.373422, "ENTER", "uuid2", 20.0d, 1452583937l});
+        inputHandler.send(new Object[]{"person1", 6.718681, 80.373422, "ENTER", "uuid2", 20.0d, 1452583937L});
         Thread.sleep(500);
-        inputHandler.send(new Object[]{"person1", 6.964981, 80.773796, "ENTER", "uuid3", 20.0d, 1452583939l});
+        inputHandler.send(new Object[]{"person1", 6.964981, 80.773796, "ENTER", "uuid3", 20.0d, 1452583939L});
         Thread.sleep(500);
-        inputHandler.send(new Object[]{"person1", 8.729925, 80.475966, "ENTER", "uuid4", 100.0d, 1452583941l});
+        inputHandler.send(new Object[]{"person1", 8.729925, 80.475966, "ENTER", "uuid4", 100.0d, 1452583941L});
         Thread.sleep(100);
 
-        Assert.assertEquals(4, count);
-        Assert.assertTrue(eventArrived);
-        executionPlanRuntime.shutdown();
+        AssertJUnit.assertEquals(4, count);
+        AssertJUnit.assertTrue(eventArrived);
+        siddhiAppRuntime.shutdown();
     }
 
     @Test
@@ -105,7 +107,7 @@ public class AverageLocationTestCase {
         log.info("testAverageLocation with different weights TestCase");
         SiddhiManager siddhiManager = new SiddhiManager();
 
-        ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(
                 "@config(async = 'true') " +
                         "define stream cleanedStream (locationRecorder string, latitude double, longitude double, " +
                         "beaconProximity string, uuid string, weight double, timestamp long); " +
@@ -115,47 +117,48 @@ public class AverageLocationTestCase {
                         "select * " +
                         "insert into dataOut;");
 
-        executionPlanRuntime.addCallback("query1", new QueryCallback() {
+        siddhiAppRuntime.addCallback("query1", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
                     count++;
                     if (count == 1) {
-                        Assert.assertEquals(6.876657000000001, event.getData(7));
-                        Assert.assertEquals(79.897648, event.getData(8));
+                        AssertJUnit.assertEquals(6.876657000000001, event.getData(7));
+                        AssertJUnit.assertEquals(79.897648, event.getData(8));
                         eventArrived = true;
                     } else if (count == 2) {
-                        Assert.assertEquals(6.797727042508542, event.getData(7));
-                        Assert.assertEquals(80.13557409252783, event.getData(8));
+                        AssertJUnit.assertEquals(6.797727042508542, event.getData(7));
+                        AssertJUnit.assertEquals(80.13557409252783, event.getData(8));
                         eventArrived = true;
                     } else if (count == 3) {
-                        Assert.assertEquals(6.853572272662002, event.getData(7));
-                        Assert.assertEquals(true, 80.34826512892124 == (Double) event.getData(8) || 80.34826512892126 == (Double) event.getData(8));
+                        AssertJUnit.assertEquals(6.853572272662002, event.getData(7));
+                        AssertJUnit.assertEquals(true, 80.34826512892124 == (Double) event.getData(8) ||
+                                80.34826512892126 == (Double) event.getData(8));
                         eventArrived = true;
                     } else if (count == 4) {
-                        Assert.assertEquals(7.322639705655454, event.getData(7));
-                        Assert.assertEquals(80.38008364787895, event.getData(8));
+                        AssertJUnit.assertEquals(7.322639705655454, event.getData(7));
+                        AssertJUnit.assertEquals(80.38008364787895, event.getData(8));
                         eventArrived = true;
                     }
                 }
             }
         });
 
-        InputHandler inputHandler = executionPlanRuntime.getInputHandler("cleanedStream");
-        executionPlanRuntime.start();
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("cleanedStream");
+        siddhiAppRuntime.start();
         //nugegods, ratnapura, nuwara eliya, vavniya --> kegalle
-        inputHandler.send(new Object[]{"person1", 6.876657, 79.897648, "ENTER", "uuid1", 20.0d, 1452583935l});
+        inputHandler.send(new Object[]{"person1", 6.876657, 79.897648, "ENTER", "uuid1", 20.0d, 1452583935L});
         Thread.sleep(500);
-        inputHandler.send(new Object[]{"person1", 6.718681, 80.373422, "ENTER", "uuid2", 20.0d, 1452583937l});
+        inputHandler.send(new Object[]{"person1", 6.718681, 80.373422, "ENTER", "uuid2", 20.0d, 1452583937L});
         Thread.sleep(500);
-        inputHandler.send(new Object[]{"person1", 6.964981, 80.773796, "ENTER", "uuid3", 20.0d, 1452583939l});
+        inputHandler.send(new Object[]{"person1", 6.964981, 80.773796, "ENTER", "uuid3", 20.0d, 1452583939L});
         Thread.sleep(500);
-        inputHandler.send(new Object[]{"person1", 8.729925, 80.475966, "ENTER", "uuid4", 20.0d, 1452583941l});
+        inputHandler.send(new Object[]{"person1", 8.729925, 80.475966, "ENTER", "uuid4", 20.0d, 1452583941L});
         Thread.sleep(100);
 
-        Assert.assertEquals(4, count);
-        Assert.assertTrue(eventArrived);
-        executionPlanRuntime.shutdown();
+        AssertJUnit.assertEquals(4, count);
+        AssertJUnit.assertTrue(eventArrived);
+        siddhiAppRuntime.shutdown();
     }
 }

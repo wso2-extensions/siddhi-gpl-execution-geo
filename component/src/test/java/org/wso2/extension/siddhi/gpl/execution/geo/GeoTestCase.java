@@ -19,8 +19,8 @@
 package org.wso2.extension.siddhi.gpl.execution.geo;
 
 import org.apache.log4j.Logger;
-import org.junit.BeforeClass;
-import org.wso2.siddhi.core.ExecutionPlanRuntime;
+import org.testng.annotations.BeforeClass;
+import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 
@@ -35,16 +35,17 @@ public abstract class GeoTestCase {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        logger.info("Init Siddhi");// Create Siddhi Manager
+        logger.info("Init Siddhi"); // Create Siddhi Manager
         siddhiManager = new SiddhiManager();
         data = new ArrayList<Object[]>();
         expectedResult = new ArrayList<Boolean>();
     }
 
-    protected void generateEvents(ExecutionPlanRuntime executionPlanRuntime) throws Exception {
-        InputHandler inputHandler = executionPlanRuntime.getInputHandler("dataIn");
+    protected void generateEvents(SiddhiAppRuntime siddhiAppRuntime) throws Exception {
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("dataIn");
         for (Object[] dataLine : data) {
             inputHandler.send(dataLine);
         }
     }
 }
+

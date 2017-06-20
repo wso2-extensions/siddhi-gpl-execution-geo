@@ -20,7 +20,9 @@ package org.wso2.extension.siddhi.gpl.execution.geo.stream;
 
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.GeoOperation;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.WithinOperation;
-import org.wso2.siddhi.core.config.ExecutionPlanContext;
+import org.wso2.siddhi.annotation.Example;
+import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.ComplexEvent;
 import org.wso2.siddhi.core.event.ComplexEventChunk;
 import org.wso2.siddhi.core.event.stream.StreamEvent;
@@ -29,16 +31,28 @@ import org.wso2.siddhi.core.event.stream.populater.ComplexEventPopulater;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.query.processor.Processor;
 import org.wso2.siddhi.core.query.processor.stream.StreamProcessor;
+import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.query.api.definition.AbstractDefinition;
 import org.wso2.siddhi.query.api.definition.Attribute;
 import org.wso2.siddhi.query.api.definition.Attribute.Type;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Calculate geo crosses
+ **/
+@Extension(
+        name = "crosses",
+        namespace = "geo",
+        description = "Geo crosses stream function",
+        examples = @Example(description = "TBD", syntax = "TBD")
+)
 public class GeoCrossesStreamProcessor extends StreamProcessor {
 
     private GeoOperation geoOperation;
@@ -49,17 +63,21 @@ public class GeoCrossesStreamProcessor extends StreamProcessor {
      *
      * @param inputDefinition              the incoming stream definition
      * @param attributeExpressionExecutors the executors of each function parameters
-     * @param executionPlanContext         the context of the execution plan
+     * @param siddhiAppContext             the context of the execution plan
      * @return the additional output attributes introduced by the function
      */
     @Override
-    protected List<Attribute> init(AbstractDefinition inputDefinition, ExpressionExecutor[] attributeExpressionExecutors, ExecutionPlanContext executionPlanContext) {
+    protected List<Attribute> init(AbstractDefinition inputDefinition,
+                                   ExpressionExecutor[] attributeExpressionExecutors,
+                                   ConfigReader configReader,
+                                   SiddhiAppContext siddhiAppContext) {
         geoOperation = new WithinOperation();
         geoOperation.init(attributeExpressionExecutors, 1, attributeExpressionLength);
         List<Attribute> attributeList = new ArrayList<Attribute>(1);
         attributeList.add(new Attribute("crosses", Type.BOOL));
         return attributeList;
     }
+
 
     /**
      * This will be called only once, to acquire required resources
@@ -87,8 +105,8 @@ public class GeoCrossesStreamProcessor extends StreamProcessor {
      * @return stateful objects of the element as an array
      */
     @Override
-    public Object[] currentState() {
-        return new Object[0];
+    public Map<String, Object> currentState() {
+        return new HashMap<String, Object>();
     }
 
     /**
@@ -99,20 +117,21 @@ public class GeoCrossesStreamProcessor extends StreamProcessor {
      *              the same order provided by currentState().
      */
     @Override
-    public void restoreState(Object[] state) {
+    public void restoreState(Map<String, Object> state) {
 
     }
 
     @Override
-    protected void process(ComplexEventChunk<StreamEvent> streamEventChunk, Processor nextProcessor, StreamEventCloner streamEventCloner, ComplexEventPopulater complexEventPopulater) {
+    protected void process(ComplexEventChunk<StreamEvent> streamEventChunk, Processor nextProcessor,
+                           StreamEventCloner streamEventCloner, ComplexEventPopulater complexEventPopulater) {
         while (streamEventChunk.hasNext()) {
             ComplexEvent complexEvent = streamEventChunk.next();
 
             Object[] data = new Object[attributeExpressionLength - 1];
             for (int i = 1; i < attributeExpressionLength; i++) {
-                data[i-1] = attributeExpressionExecutors[i].execute(complexEvent);
+                data[i - 1] = attributeExpressionExecutors[i].execute(complexEvent);
             }
-            boolean within = (Boolean)geoOperation.process(data);
+            boolean within = (Boolean) geoOperation.process(data);
 
             String id = attributeExpressionExecutors[0].execute(complexEvent).toString();
             if (set.contains(id)) {
@@ -135,4 +154,5 @@ public class GeoCrossesStreamProcessor extends StreamProcessor {
         }
         nextProcessor.process(streamEventChunk);
     }
+
 }
