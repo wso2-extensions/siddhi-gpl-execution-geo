@@ -23,6 +23,9 @@ import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.GeoOperation;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.WithinDistanceOperation;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.ReturnAttribute;
+import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.ComplexEvent;
 import org.wso2.siddhi.core.event.ComplexEventChunk;
@@ -51,8 +54,48 @@ import java.util.concurrent.ConcurrentHashMap;
 @Extension(
         name = "stationary",
         namespace = "geo",
-        description = "Geo stationary Stream function",
-        examples = @Example(description = "TBD", syntax = "TBD")
+        description = "Returns true when the object (defined in terms of  longitude  and latitude) becomes stationary" +
+                " within the specified radius. Returns false when the object moves out of the specified radius.",
+        parameters = {
+                @Parameter(
+                        name = "id",
+                        description = "object id which is defined in terms of longitude and latitude",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "longitude",
+                        description = "longitude of the location as a double",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "latitude",
+                        description = "latitude of the location as a double",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "geo.json.geometry.fence",
+                        description = "string value of the json object which contains the details of the geo geometry" +
+                                " fence. This is ",
+                        optional = true,
+                        defaultValue = " ",
+                        type = DataType.STRING
+
+                ),
+                @Parameter(
+                        name = "radius",
+                        description = "specific radius as a double value",
+                        type = DataType.DOUBLE
+                )
+        },
+        examples = @Example(
+                description = "returns true",
+                syntax = "stationary(km-4354,0,0, 110574.61087757687)"
+        ),
+        returnAttributes = @ReturnAttribute(
+                name = "isStationary",
+                description = "This will return a boolean value",
+                type = DataType.BOOL
+        )
 )
 public class GeoStationaryStreamProcessor extends StreamProcessor {
 

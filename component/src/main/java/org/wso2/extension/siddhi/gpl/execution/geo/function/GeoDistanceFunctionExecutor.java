@@ -20,6 +20,7 @@ package org.wso2.extension.siddhi.gpl.execution.geo.function;
 
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
 import org.wso2.siddhi.annotation.ReturnAttribute;
 import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
@@ -54,9 +55,35 @@ import java.util.Map;
 @Extension(
         name = "distance",
         namespace = "geo",
-        description = "Geo Distance",
-        examples = @Example(description = "TBD", syntax = "TBD"),
-        returnAttributes = @ReturnAttribute(description = "TBD", type = {DataType.DOUBLE})
+        description = "This method gives the distance between two geo locations in meters",
+        examples = @Example(
+                description = "This will returns the distance in meters",
+                syntax = "geo:distance(latitude, longitude, prevLatitude, prevLongitude)"),
+        parameters = {
+                @Parameter(name = "location1.latitude",
+                        description = "latitude value of 1st location",
+                        type = DataType.DOUBLE,
+                        optional = false
+                ),
+                @Parameter(name = "location1.longitude",
+                        description = "longitude value of 1st location",
+                        type = DataType.DOUBLE,
+                        optional = false
+                ),
+                @Parameter(name = "location2.latitude",
+                        description = "latitude value of 2nd location",
+                        type = DataType.DOUBLE,
+                        optional = false
+                ),
+                @Parameter(name = "location2.longitude",
+                        description = "longitude value of 2nd location",
+                        type = DataType.DOUBLE,
+                        optional = false
+                )
+        },
+        returnAttributes = @ReturnAttribute(
+                description = "Distance between two given geo location in meters",
+                type = {DataType.DOUBLE})
 )
 public class GeoDistanceFunctionExecutor extends FunctionExecutor {
     Attribute.Type returnType = Attribute.Type.DOUBLE;

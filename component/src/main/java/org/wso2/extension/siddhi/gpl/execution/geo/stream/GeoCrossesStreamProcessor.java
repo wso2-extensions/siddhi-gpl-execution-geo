@@ -22,6 +22,9 @@ import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.GeoOperation;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.WithinOperation;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.ReturnAttribute;
+import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.ComplexEvent;
 import org.wso2.siddhi.core.event.ComplexEventChunk;
@@ -50,8 +53,56 @@ import java.util.concurrent.ConcurrentHashMap;
 @Extension(
         name = "crosses",
         namespace = "geo",
-        description = "Geo crosses stream function",
-        examples = @Example(description = "TBD", syntax = "TBD")
+        description = "Returns true when the  the specified object of which the location is specified  in terms of " +
+                "\blongitude  and \b latitude crosses the geographic location specified in " +
+                "\bgeo.json.geometry.fence. Returns false when the object crosses out of the location specified in " +
+                "\bgeo.json.geometry.fence. \n Or Returns true when the object (i.e. geo.json.geometry) crosses the" +
+                " specified geographic location (i.e. geo.json.geometry.fence). " +
+                "Returns false when the object crosses out of \bgeo.json.geometry.fence. ",
+
+        parameters = {
+                @Parameter(
+                        name = "id",
+                        description = "location id",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "longitude",
+                        description = "this will accepts the longitude value of the geo location as a double, " +
+                                "This and the latitude value can be given instead of giving geo.json.geometry value ",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "latitude",
+                        description = "this will accepts the latitude value of the geo location as a double. ",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "geo.json.geometry",
+                        description = "this will accepts a json as a string which contains the geometry type and" +
+                                " coordinates of a geo geometry.This can be given instead of the longitude and " +
+                                "latitude values",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "geo.json.geometry.fence",
+                        description = "this will accepts a json as a string which contains the geometry type and" +
+                                " coordinates of a geo geometry fence",
+                        type = DataType.STRING
+                )
+
+        },
+        examples = {@Example(
+                description = "This will return true since the specified location crosses the " +
+                        "geo.json.geometry.fence",
+                syntax = "crosses(km-4354, -0.5, 0.5, {'type':'Polygon'," +
+                        "'coordinates':[[[0, 0],[2, 0],[2, 1],[0, 1],[0, 0]]]} )")
+        },
+        returnAttributes = @ReturnAttribute(
+                name = "isCrossed",
+                description = "This will return a boolean value",
+                type = {DataType.BOOL}
+        )
 )
 public class GeoCrossesStreamProcessor extends StreamProcessor {
 
@@ -63,7 +114,8 @@ public class GeoCrossesStreamProcessor extends StreamProcessor {
      *
      * @param inputDefinition              the incoming stream definition
      * @param attributeExpressionExecutors the executors of each function parameters
-     * @param siddhiAppContext             the context of the execution plan
+     * @param siddhiAppContext             the
+     *                                     ncontext of the execution plan
      * @return the additional output attributes introduced by the function
      */
     @Override

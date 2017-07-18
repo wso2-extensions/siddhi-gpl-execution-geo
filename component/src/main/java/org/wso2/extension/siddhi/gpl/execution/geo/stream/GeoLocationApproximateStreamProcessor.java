@@ -20,6 +20,8 @@ package org.wso2.extension.siddhi.gpl.execution.geo.stream;
 
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
@@ -66,8 +68,52 @@ import java.util.concurrent.ConcurrentHashMap;
 @Extension(
         name = "locationApproximate",
         namespace = "geo",
-        description = "Geo Location Approximation",
-        examples = @Example(description = "TBD", syntax = "TBD")
+        description = "Geo Location Approximation compute the average location of the locationRecorder using the" +
+                " collection iBeacons which the location recorder resides.",
+        examples = @Example(
+                description = "this will return 6.876657000000001 as the approximated location ",
+                syntax = "geoLocationApproximate(\"person1\", 6.876657, 79.897648, \"ENTER\"," +
+                        " \"uuid1\", 20.0d, 1452583935L)"
+        ),
+        parameters = {
+                @Parameter(
+                        name = "location.recorder",
+                        description = "unique id of the object or item",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "latitude",
+                        description = "latitude value of the iBeacon",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "longitude",
+                        description = "longitude value of the iBeacon",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "sensor.proximity",
+                        description = "proximity which will be given by the iBeacon (eg: ENTER, RANGE, EXIT)",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "sensor.uuid",
+                        description = "unique id of the iBeacon",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "sensor.weight",
+                        description = "weight of the iBeacon which influence the averaging of the location " +
+                                "(eg: approximate distance from the iBeacon",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "timestamp",
+                        description = "timestamp of the log which will be used to remove iBeacon from one's " +
+                                "collection when there is no new log for 5 minutes",
+                        type = DataType.LONG
+                )
+        }
 
 )
 public class GeoLocationApproximateStreamProcessor extends StreamFunctionProcessor {

@@ -23,6 +23,9 @@ import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.GeoOperation;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.WithinDistanceOperation;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.ReturnAttribute;
+import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.ComplexEventChunk;
 import org.wso2.siddhi.core.event.stream.StreamEvent;
@@ -52,8 +55,48 @@ import java.util.concurrent.ConcurrentHashMap;
 @Extension(
         name = "proximity",
         namespace = "geo",
-        description = "Geo Proximity Stream Processor function",
-        examples = @Example(description = "TBD", syntax = "TBD")
+        description = "This will returns true when two objects (specified in terms of longitude and latitude) are " +
+                "within the specified radius to another object. Returns false when the specified object moves out of " +
+                "the specified radius. The proximityWith optional attribute indicates the ID of the object that the " +
+                "object specified is in close proximity with. proximityID is a unique ID for the two objects" +
+                " in close proximity.",
+        parameters = {
+                @Parameter(
+                        name = "id",
+                        description = "id of the object",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "longitude",
+                        description = "longitude value of the location",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "latitude",
+                        description = "latitude value of the location",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "geo.json.geometry.fence",
+                        description = "string value of the json object which contains the details of the geo" +
+                                " geometry fence.",
+                        type = DataType.STRING
+
+                ),
+                @Parameter(
+                        name = "radius",
+                        description = "specific radius as a double value",
+                        type = DataType.DOUBLE
+                )
+        },
+        examples = @Example(
+                description = "This will return true since given longitude and latitude is within the radius",
+                syntax = "proximity(1, 0, 0, 110574.61087757687)"),
+        returnAttributes = @ReturnAttribute(
+                name = "isWithinProximity",
+                description = "This will return a boolean value",
+                type = DataType.BOOL
+        )
 )
 public class GeoProximityStreamProcessor extends StreamProcessor {
 
