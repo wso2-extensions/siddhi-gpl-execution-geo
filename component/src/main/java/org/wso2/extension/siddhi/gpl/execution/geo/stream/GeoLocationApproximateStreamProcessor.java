@@ -38,29 +38,30 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * geoLocationApproximate(locationRecorder, latitude, longitude, sensorProximity, sensorUUID, sensorWeight, timestamp)
+ * geoLocationApproximate(location.recorder, latitude, longitude, sensor.proximity,
+ * sensor.uuid, sensor.weight, timestamp)
  * <p>
  * This method computed the average location of the locationRecorder using the collection iBeacons which the location
  * recorder resides.
  * <p>
- * locationRecorder - unique id of the object or item
+ * location.recorder - unique id of the object or item
  * latitude         - latitude value of the iBeacon
  * longitude        - longitude value of the iBeacon
- * sensorProximity  - proximity which will be given by the iBeacon (eg: ENTER, RANGE, EXIT)
- * sensorUUID       - unique id of the iBeacon
- * sensorWeight     - weight of the iBeacon which influence the averaging of the location (eg: approximate distance from
- * the beacon
+ * sensor.proximity  - proximity which will be given by the iBeacon (eg: ENTER, RANGE, EXIT)
+ * sensor.uuid       - unique id of the iBeacon
+ * sensor.weight     - weight of the iBeacon which influence the averaging of the location (eg: approximate distance
+ * from the beacon
  * timestamp        - timestamp of the log which will be used to remove iBeacon from one's collection when there is no
  * new log for 5 minutes
  * <p>
- * Accept Type(s) for geoLocationApproximate(locationRecorder, latitude, longitude, sensorProximity, sensorUUID,
- * sensorWeight, timestamp);
- * locationRecorder : STRING
+ * Accept Type(s) for geoLocationApproximate(location.recorder, latitude, longitude, sensor.proximity, sensor.uuid,
+ * sensor.weight, timestamp);
+ * location.recorder : STRING
  * latitude : DOUBLE
  * longitude : DOUBLE
- * sensorProximity : STRING
- * sensorUUID : STRING
- * sensorWeight : DOUBLE
+ * sensor.proximity : STRING
+ * sensor.uuid : STRING
+ * sensor.weight : DOUBLE
  * timestamp : LONG
  * <p>
  * Return Type(s): DOUBLE, DOUBLE, BOOL

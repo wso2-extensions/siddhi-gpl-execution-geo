@@ -38,8 +38,8 @@ import org.wso2.siddhi.query.api.definition.Attribute;
         namespace = "geo",
         description = "This function can be call using two sets of parameters. \n First method will returns true if " +
                 "the location specified in terms of longitude and latitude is within " +
-                "distance of the geoJSONGeometryFence. Returns false otherwise. \n Second method will return true if" +
-                "the area given by geoJSONGeometry is within distance of the geoJSONGeometryFence. " +
+                "distance of the geo.json.geometry.fence. Returns false otherwise. \n Second method will return true" +
+                " if the area given by geo.json.geometry is within distance of the geo.json.geometry.fence. " +
                 "\n please refer examples ",
         parameters = {
                 @Parameter(
@@ -69,14 +69,14 @@ import org.wso2.siddhi.query.api.definition.Attribute;
         examples = {
                 @Example(
                         description = "This will returns true because the location specified in terms of longitude" +
-                                " and latitude is within the distance of the geoJSONGeometryFence.",
+                                " and latitude is within the distance of the geo.json.geometry.fence.",
                         syntax = "withindistance( 0.5 , 0.5, " +
                                 "{'type':'Polygon'," +
                                 "'coordinates':[[[0, 0],[0, 1],[1, 1],[1, 0],[0, 0]]]}, 110574.61087757687)"
                 ),
                 @Example(
-                        description = "This will returns true because geoJSONGeometry is within the distance of" +
-                                " geoJSONGeometryFence.",
+                        description = "This will returns true because geo.json.geometry is within the distance of" +
+                                " geo.json.geometry.fence.",
                         syntax = "withindistance( {'type':'Polygon','coordinates':[[[0.5, 0.5],[0.5, 1.5],[1.5, 1.5]," +
                                 "[1.5, 0.5],[0.5, 0.5]]]} , {'type':'Polygon'," +
                                 "'coordinates':[[[0, 0],[0, 1],[1, 1],[1, 0],[0, 0]]]}, 110574.61087757687)"
