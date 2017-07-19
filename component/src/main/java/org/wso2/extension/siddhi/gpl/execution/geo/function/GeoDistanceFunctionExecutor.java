@@ -1,25 +1,25 @@
 /*
- * Copyright (c)  2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (C) 2017 WSO2 Inc. (http://wso2.com)
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.wso2.extension.siddhi.gpl.execution.geo.function;
 
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
 import org.wso2.siddhi.annotation.ReturnAttribute;
 import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
@@ -54,9 +54,35 @@ import java.util.Map;
 @Extension(
         name = "distance",
         namespace = "geo",
-        description = "Geo Distance",
-        examples = @Example(description = "TBD", syntax = "TBD"),
-        returnAttributes = @ReturnAttribute(description = "TBD", type = {DataType.DOUBLE})
+        description = "This method gives the distance between two geo locations in meters",
+        examples = @Example(
+                description = "This will returns the distance in meters",
+                syntax = "geo:distance(latitude, longitude, prevLatitude, prevLongitude)"),
+        parameters = {
+                @Parameter(name = "location1.latitude",
+                        description = "latitude value of 1st location",
+                        type = DataType.DOUBLE,
+                        optional = false
+                ),
+                @Parameter(name = "location1.longitude",
+                        description = "longitude value of 1st location",
+                        type = DataType.DOUBLE,
+                        optional = false
+                ),
+                @Parameter(name = "location2.latitude",
+                        description = "latitude value of 2nd location",
+                        type = DataType.DOUBLE,
+                        optional = false
+                ),
+                @Parameter(name = "location2.longitude",
+                        description = "longitude value of 2nd location",
+                        type = DataType.DOUBLE,
+                        optional = false
+                )
+        },
+        returnAttributes = @ReturnAttribute(
+                description = "Distance between two given geo location in meters",
+                type = {DataType.DOUBLE})
 )
 public class GeoDistanceFunctionExecutor extends FunctionExecutor {
     Attribute.Type returnType = Attribute.Type.DOUBLE;

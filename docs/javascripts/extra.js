@@ -15,28 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.wso2.extension.siddhi.gpl.execution.geo.internal.util;
+    var logoTitle = document.querySelector('.md-logo').title;
+    var extentionTitle = logoTitle.slice(7);
+    var header = document.querySelector('.md-header-nav__title');
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.prep.PreparedGeometry;
-import org.wso2.siddhi.query.api.definition.Attribute;
-
-/**
- * check whether the given area is within the another area
- * **/
-public class WithinOperation extends GeoOperation {
-    @Override
-    public Object operation(Geometry a, Geometry b, Object[] data) {
-        return a.within(b);
-    }
-
-    @Override
-    public Object operation(Geometry a, PreparedGeometry b, Object[] data) {
-        return b.contains(a);
-    }
-
-    @Override
-    public Attribute.Type getReturnType() {
-        return Attribute.Type.BOOL;
-    }
-}
+    header.innerHTML = '<span class="extention-title">' + extentionTitle + '</span>' + header.textContent;
+    

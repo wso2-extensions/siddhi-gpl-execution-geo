@@ -1,19 +1,18 @@
 /*
- * Copyright (c)  2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (C) 2017 WSO2 Inc. (http://wso2.com)
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.wso2.extension.siddhi.gpl.execution.geo.stream;
@@ -22,6 +21,9 @@ import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.GeoOperation;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.WithinOperation;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.ReturnAttribute;
+import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.ComplexEvent;
 import org.wso2.siddhi.core.event.ComplexEventChunk;
@@ -50,8 +52,56 @@ import java.util.concurrent.ConcurrentHashMap;
 @Extension(
         name = "crosses",
         namespace = "geo",
-        description = "Geo crosses stream function",
-        examples = @Example(description = "TBD", syntax = "TBD")
+        description = "Returns true when the  the specified object of which the location is specified  in terms of " +
+                "\blongitude  and \b latitude crosses the geographic location specified in " +
+                "\bgeo.json.geometry.fence. Returns false when the object crosses out of the location specified in " +
+                "\bgeo.json.geometry.fence. \n Or Returns true when the object (i.e. geo.json.geometry) crosses the" +
+                " specified geographic location (i.e. geo.json.geometry.fence). " +
+                "Returns false when the object crosses out of \bgeo.json.geometry.fence. ",
+
+        parameters = {
+                @Parameter(
+                        name = "id",
+                        description = "location id",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "longitude",
+                        description = "this will accepts the longitude value of the geo location as a double, " +
+                                "This and the latitude value can be given instead of giving geo.json.geometry value ",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "latitude",
+                        description = "this will accepts the latitude value of the geo location as a double. ",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "geo.json.geometry",
+                        description = "this will accepts a json as a string which contains the geometry type and" +
+                                " coordinates of a geo geometry.This can be given instead of the longitude and " +
+                                "latitude values",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "geo.json.geometry.fence",
+                        description = "this will accepts a json as a string which contains the geometry type and" +
+                                " coordinates of a geo geometry fence",
+                        type = DataType.STRING
+                )
+
+        },
+        examples = {@Example(
+                description = "This will return true since the specified location crosses the " +
+                        "geo.json.geometry.fence",
+                syntax = "crosses(km-4354, -0.5, 0.5, {'type':'Polygon'," +
+                        "'coordinates':[[[0, 0],[2, 0],[2, 1],[0, 1],[0, 0]]]} )")
+        },
+        returnAttributes = @ReturnAttribute(
+                name = "isCrossed",
+                description = "This will return a boolean value",
+                type = {DataType.BOOL}
+        )
 )
 public class GeoCrossesStreamProcessor extends StreamProcessor {
 
@@ -63,7 +113,8 @@ public class GeoCrossesStreamProcessor extends StreamProcessor {
      *
      * @param inputDefinition              the incoming stream definition
      * @param attributeExpressionExecutors the executors of each function parameters
-     * @param siddhiAppContext             the context of the execution plan
+     * @param siddhiAppContext             the
+     *                                     ncontext of the execution plan
      * @return the additional output attributes introduced by the function
      */
     @Override

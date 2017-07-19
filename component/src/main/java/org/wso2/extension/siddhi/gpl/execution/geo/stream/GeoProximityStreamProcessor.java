@@ -1,19 +1,18 @@
 /*
- * Copyright (c)  2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (C) 2017 WSO2 Inc. (http://wso2.com)
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.wso2.extension.siddhi.gpl.execution.geo.stream;
@@ -23,6 +22,9 @@ import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.GeoOperation;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.WithinDistanceOperation;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.ReturnAttribute;
+import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.ComplexEventChunk;
 import org.wso2.siddhi.core.event.stream.StreamEvent;
@@ -52,8 +54,48 @@ import java.util.concurrent.ConcurrentHashMap;
 @Extension(
         name = "proximity",
         namespace = "geo",
-        description = "Geo Proximity Stream Processor function",
-        examples = @Example(description = "TBD", syntax = "TBD")
+        description = "This will returns true when two objects (specified in terms of longitude and latitude) are " +
+                "within the specified radius to another object. Returns false when the specified object moves out of " +
+                "the specified radius. The proximityWith optional attribute indicates the ID of the object that the " +
+                "object specified is in close proximity with. proximityID is a unique ID for the two objects" +
+                " in close proximity.",
+        parameters = {
+                @Parameter(
+                        name = "id",
+                        description = "id of the object",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "longitude",
+                        description = "longitude value of the location",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "latitude",
+                        description = "latitude value of the location",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "geo.json.geometry.fence",
+                        description = "string value of the json object which contains the details of the geo" +
+                                " geometry fence.",
+                        type = DataType.STRING
+
+                ),
+                @Parameter(
+                        name = "radius",
+                        description = "specific radius as a double value",
+                        type = DataType.DOUBLE
+                )
+        },
+        examples = @Example(
+                description = "This will return true since given longitude and latitude is within the radius",
+                syntax = "proximity(1, 0, 0, 110574.61087757687)"),
+        returnAttributes = @ReturnAttribute(
+                name = "isWithinProximity",
+                description = "This will return a boolean value",
+                type = DataType.BOOL
+        )
 )
 public class GeoProximityStreamProcessor extends StreamProcessor {
 

@@ -1,25 +1,26 @@
 /*
- * Copyright (c)  2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (C) 2017 WSO2 Inc. (http://wso2.com)
  *
- * WSO2 Inc. licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.wso2.extension.siddhi.gpl.execution.geo.stream;
 
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
@@ -36,29 +37,30 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * geoLocationApproximate(locationRecorder, latitude, longitude, sensorProximity, sensorUUID, sensorWeight, timestamp)
+ * geoLocationApproximate(location.recorder, latitude, longitude, sensor.proximity,
+ * sensor.uuid, sensor.weight, timestamp)
  * <p>
  * This method computed the average location of the locationRecorder using the collection iBeacons which the location
  * recorder resides.
  * <p>
- * locationRecorder - unique id of the object or item
+ * location.recorder - unique id of the object or item
  * latitude         - latitude value of the iBeacon
  * longitude        - longitude value of the iBeacon
- * sensorProximity  - proximity which will be given by the iBeacon (eg: ENTER, RANGE, EXIT)
- * sensorUUID       - unique id of the iBeacon
- * sensorWeight     - weight of the iBeacon which influence the averaging of the location (eg: approximate distance from
- * the beacon
+ * sensor.proximity  - proximity which will be given by the iBeacon (eg: ENTER, RANGE, EXIT)
+ * sensor.uuid       - unique id of the iBeacon
+ * sensor.weight     - weight of the iBeacon which influence the averaging of the location (eg: approximate distance
+ * from the beacon
  * timestamp        - timestamp of the log which will be used to remove iBeacon from one's collection when there is no
  * new log for 5 minutes
  * <p>
- * Accept Type(s) for geoLocationApproximate(locationRecorder, latitude, longitude, sensorProximity, sensorUUID,
- * sensorWeight, timestamp);
- * locationRecorder : STRING
+ * Accept Type(s) for geoLocationApproximate(location.recorder, latitude, longitude, sensor.proximity, sensor.uuid,
+ * sensor.weight, timestamp);
+ * location.recorder : STRING
  * latitude : DOUBLE
  * longitude : DOUBLE
- * sensorProximity : STRING
- * sensorUUID : STRING
- * sensorWeight : DOUBLE
+ * sensor.proximity : STRING
+ * sensor.uuid : STRING
+ * sensor.weight : DOUBLE
  * timestamp : LONG
  * <p>
  * Return Type(s): DOUBLE, DOUBLE, BOOL
@@ -66,8 +68,52 @@ import java.util.concurrent.ConcurrentHashMap;
 @Extension(
         name = "locationApproximate",
         namespace = "geo",
-        description = "Geo Location Approximation",
-        examples = @Example(description = "TBD", syntax = "TBD")
+        description = "Geo Location Approximation compute the average location of the locationRecorder using the" +
+                " collection iBeacons which the location recorder resides.",
+        examples = @Example(
+                description = "this will return 6.876657000000001 as the approximated location ",
+                syntax = "geoLocationApproximate(\"person1\", 6.876657, 79.897648, \"ENTER\"," +
+                        " \"uuid1\", 20.0d, 1452583935L)"
+        ),
+        parameters = {
+                @Parameter(
+                        name = "location.recorder",
+                        description = "unique id of the object or item",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "latitude",
+                        description = "latitude value of the iBeacon",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "longitude",
+                        description = "longitude value of the iBeacon",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "sensor.proximity",
+                        description = "proximity which will be given by the iBeacon (eg: ENTER, RANGE, EXIT)",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "sensor.uuid",
+                        description = "unique id of the iBeacon",
+                        type = DataType.STRING
+                ),
+                @Parameter(
+                        name = "sensor.weight",
+                        description = "weight of the iBeacon which influence the averaging of the location " +
+                                "(eg: approximate distance from the iBeacon",
+                        type = DataType.DOUBLE
+                ),
+                @Parameter(
+                        name = "timestamp",
+                        description = "timestamp of the log which will be used to remove iBeacon from one's " +
+                                "collection when there is no new log for 5 minutes",
+                        type = DataType.LONG
+                )
+        }
 
 )
 public class GeoLocationApproximateStreamProcessor extends StreamFunctionProcessor {
