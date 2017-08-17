@@ -12,7 +12,6 @@ extra:
 pages:
 - Welcome to Siddhi GPL Execution Extension - Geo: index.md
 - License: license.md
-- Api:
-  - 4.0.0-SNAPSHOT: api/4.0.0-SNAPSHOT.md
+- API Docs:
   - 4.0.1-SNAPSHOT: api/4.0.1-SNAPSHOT.md
 theme: material
