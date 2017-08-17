@@ -1,5 +1,13 @@
 Siddhi-gpl-execution-geo
 ---------------------------
+
+---
+|  Branch | Build Status |
+| :------ |:------------ | 
+| master  | [![Build Status](https://wso2.org/jenkins/view/All%20Builds/job/siddhi/job/siddhi-gpl-execution-geo/badge/icon)](https://wso2.org/jenkins/view/All%20Builds/job/siddhi/job/siddhi-gpl-execution-geo/) |
+---
+##### New version of Siddhi v4.0.0 is built in Java 8.
+
 This extension provides geo data related functionality such as checking whether a given geo coordinate is within a predefined geo-fence, etc. Following are the functions of the Geo extension.
 
    * Intersects function

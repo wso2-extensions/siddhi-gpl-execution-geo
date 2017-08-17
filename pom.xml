@@ -44,11 +44,12 @@
     </profiles>
 
     <properties>
-        <siddhi.version>4.0.0-M15</siddhi.version>
+        <siddhi.version>4.0.0-M35</siddhi.version>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <gson.version>2.2.4</gson.version>
         <geotools.version>13.6.0.wso2v1</geotools.version>
         <testng.version>6.8</testng.version>
+        <jacoco.version>0.7.9</jacoco.version>
     </properties>
 
     <scm>
@@ -114,6 +115,12 @@
                 <artifactId>testng</artifactId>
                 <version>${testng.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jacoco</groupId>
+                <artifactId>org.jacoco.agent</artifactId>
+                <classifier>runtime</classifier>
+                <version>${jacoco.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

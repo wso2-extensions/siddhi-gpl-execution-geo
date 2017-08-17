@@ -15,4 +15,6 @@ pages:
 - Api:
   - 4.0.0-SNAPSHOT: api/4.0.0-SNAPSHOT.md
   - 4.0.1-SNAPSHOT: api/4.0.1-SNAPSHOT.md
+- API Docs:
+  - 4.0.1-SNAPSHOT: api/4.0.1-SNAPSHOT.md
 theme: material
