@@ -1,0 +1,52 @@
+/*
+ * Copyright (C) 2017 WSO2 Inc. (http://wso2.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.md-header-nav__button.md-logo img {
+    width: 140px;
+    height: 33px;
+    margin-right: 0;
+}
+
+.md-content__icon,
+.md-footer-nav__button,
+.md-header-nav__button,
+.md-nav__button,
+.md-nav__title::before,
+.md-search-result__article--document::before {
+    margin: 0.3rem;
+    padding: 0;
+}
+
+.extention-title {
+    font-weight: 700;
+    margin-right: 50px;
+}
+
+.md-header-nav__title {
+    padding-left: 5px;
+}
+
+@media (max-width: 1219px) {
+
+    .extention-title {
+        display: none;
+    }
+
+    html .md-nav--primary .md-nav__title--site .md-nav__button {
+        width: 13.4rem;
+    }
+}
