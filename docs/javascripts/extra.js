@@ -15,9 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-    var logoTitle = document.querySelector('.md-logo').title;
-    var extentionTitle = logoTitle.slice(7);
-    var header = document.querySelector('.md-header-nav__title');
+var logoTitle = document.querySelector('.md-logo').title;
+var extentionTitle = logoTitle.slice(7);
+var header = document.querySelector('.md-header-nav__title');
 
-    header.innerHTML = '<span class="extention-title">' + extentionTitle + '</span>' + header.textContent;
+header.innerHTML = '<span class="extention-title">' + extentionTitle + '</span>' + header.textContent;
     
