@@ -29,7 +29,7 @@ Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/si
 ```
      <dependency>
         <groupId>org.wso2.extension.siddhi.gpl-execution-geo</groupId>
-        <artifactId>siddhi-gpl-execution-geo-parent</artifactId>
+        <artifactId>siddhi-gpl-execution-geo</artifactId>
         <version>x.x.x</version>
      </dependency>
 ```
