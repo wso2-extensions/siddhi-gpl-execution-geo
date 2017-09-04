@@ -18,15 +18,29 @@
 package org.wso2.extension.siddhi.gpl.execution.geo.stream;
 
 import org.apache.log4j.Logger;
+import org.testng.Assert;
 import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.gpl.execution.geo.GeoTestCase;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
+import org.wso2.siddhi.core.util.EventPrinter;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeoStationaryTestCase extends GeoTestCase {
     private static Logger logger = Logger.getLogger(GeoStationaryTestCase.class);
+    private AtomicInteger count = new AtomicInteger(0);
+    private volatile boolean eventArrived;
+
+    @BeforeMethod
+    public void init() {
+        count.set(0);
+        eventArrived = false;
+    }
 
     @Test
     public void testStationary() throws Exception {
@@ -34,7 +48,6 @@ public class GeoStationaryTestCase extends GeoTestCase {
 
         data.clear();
         expectedResult.clear();
-        eventCount = 0;
 
         data.add(new Object[]{"km-4354", 0d, 0d});
         data.add(new Object[]{"km-4354", 1d, 1d});
@@ -63,15 +76,19 @@ public class GeoStationaryTestCase extends GeoTestCase {
         siddhiAppRuntime.addCallback("query1", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
+                EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
                     Boolean isWithin = (Boolean) event.getData(0);
-                    AssertJUnit.assertEquals(expectedResult.get(eventCount++), isWithin);
+                    AssertJUnit.assertEquals(expectedResult.get(count.get()), isWithin);
+                    count.incrementAndGet();
+                    eventArrived = true;
                 }
             }
         });
         siddhiAppRuntime.start();
         generateEvents(siddhiAppRuntime);
-        Thread.sleep(1000);
-        AssertJUnit.assertEquals(expectedResult.size(), eventCount);
+        SiddhiTestHelper.waitForEvents(100, 3, count, 60000);
+        AssertJUnit.assertEquals(expectedResult.size(), count.get());
+        Assert.assertTrue(eventArrived);
     }
 }

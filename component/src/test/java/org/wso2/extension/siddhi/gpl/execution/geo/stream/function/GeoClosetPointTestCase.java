@@ -19,18 +19,30 @@ package org.wso2.extension.siddhi.gpl.execution.geo.stream.function;
 
 import org.apache.log4j.Logger;
 import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.gpl.execution.geo.GeoTestCase;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.util.EventPrinter;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
 
-/**Test case for geo closet point**/
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * Test case for geo closet point
+ **/
 public class GeoClosetPointTestCase extends GeoTestCase {
     private static Logger logger = Logger.getLogger(GeoClosetPointTestCase.class);
+    private AtomicInteger count = new AtomicInteger(0);
+    private volatile boolean eventArrived;
 
-
+    @BeforeMethod
+    public void init() {
+        count.set(0);
+        eventArrived = false;
+    }
 
     @Test
     public void testClosestPoints() throws Exception {
@@ -38,7 +50,7 @@ public class GeoClosetPointTestCase extends GeoTestCase {
 
         data.clear();
         expectedResult.clear();
-        eventCount = 0;
+//        eventCount = 0;
         data.add(new Object[]{"km-4354", 0.5d, 0.5d});
         expectedResult.add(true);
         data.add(new Object[]{"km-4354", 2d, 2d});
@@ -70,24 +82,31 @@ public class GeoClosetPointTestCase extends GeoTestCase {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
                     eventCount++;
-                    switch (eventCount) {
+                    count.incrementAndGet();
+                    switch (count.get()) {
                         case 1:
                             AssertJUnit.assertArrayEquals(new Object[]{0.5, 0.5, 0.5, 0.5}, event.getData());
+                            eventArrived = true;
                             break;
                         case 2:
                             AssertJUnit.assertArrayEquals(new Object[]{2.0, 2.0, 1.0, 2.0}, event.getData());
+                            eventArrived = true;
                             break;
                         case 3:
                             AssertJUnit.assertArrayEquals(new Object[]{-0.5, 1.5, 0.0, 1.5}, event.getData());
+                            eventArrived = true;
                             break;
                         case 4:
                             AssertJUnit.assertArrayEquals(new Object[]{0.5, 1.25, 0.5, 1.25}, event.getData());
+                            eventArrived = true;
                             break;
                         case 5:
                             AssertJUnit.assertArrayEquals(new Object[]{0.0, 0.0, 0.0, 0.0}, event.getData());
+                            eventArrived = true;
                             break;
                         case 6:
                             AssertJUnit.assertArrayEquals(new Object[]{-1.0, -1.0, 0.0, 0.0}, event.getData());
+                            eventArrived = true;
                             break;
 
                     }
@@ -96,8 +115,9 @@ public class GeoClosetPointTestCase extends GeoTestCase {
         });
         siddhiAppRuntime.start();
         generateEvents(siddhiAppRuntime);
-        Thread.sleep(1000);
-        AssertJUnit.assertEquals(expectedResult.size(), eventCount);
+        SiddhiTestHelper.waitForEvents(100, 6, count, 60000);
+        AssertJUnit.assertEquals(expectedResult.size(), count.get());
+        AssertJUnit.assertTrue(eventArrived);
     }
 
 
@@ -107,7 +127,6 @@ public class GeoClosetPointTestCase extends GeoTestCase {
 
         data.clear();
         expectedResult.clear();
-        eventCount = 0;
         data.add(new Object[]{"km-4354", "{'type':'Polygon'," +
                 "'coordinates':[[[0.5, 0.5],[0.5,1.5],[0.75,1.5],[0.75,0.5],[0.5,0.5]]]}"});
         expectedResult.add(true);
@@ -140,27 +159,33 @@ public class GeoClosetPointTestCase extends GeoTestCase {
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
-                    eventCount++;
-                    switch (eventCount) {
+                    count.incrementAndGet();
+                    switch (count.get()) {
                         case 1:
                             AssertJUnit.assertArrayEquals(new Object[]{0.5, 0.5, 0.5, 0.5}, event.getData());
+                            eventArrived = true;
                             break;
                         case 2:
                             AssertJUnit.assertArrayEquals(new Object[]{2.5000035190937595, 1.5,
                                     2.5000035190937595, 1.5}, event.getData());
+                            eventArrived = true;
                             break;
                         case 3:
                             AssertJUnit.assertArrayEquals(new Object[]{8.99999648090624, 1.5000000000000007,
                                     3.0, 1.5000000000000009}, event.getData());
+                            eventArrived = true;
                             break;
                         case 4:
                             AssertJUnit.assertArrayEquals(new Object[]{-1.0, 1.0, 0.0, 1.0}, event.getData());
+                            eventArrived = true;
                             break;
                         case 5:
                             AssertJUnit.assertArrayEquals(new Object[]{0.5, 0.5, 0.5, 0.5}, event.getData());
+                            eventArrived = true;
                             break;
                         case 6:
                             AssertJUnit.assertArrayEquals(new Object[]{10.0, 10.0, 3.0, 4.0}, event.getData());
+                            eventArrived = true;
                             break;
 
                     }
@@ -169,7 +194,8 @@ public class GeoClosetPointTestCase extends GeoTestCase {
         });
         siddhiAppRuntime.start();
         generateEvents(siddhiAppRuntime);
-        Thread.sleep(1000);
-        AssertJUnit.assertEquals(expectedResult.size(), eventCount);
+        SiddhiTestHelper.waitForEvents(100, 6, count, 60000);
+        AssertJUnit.assertEquals(expectedResult.size(), count.get());
+        AssertJUnit.assertTrue(eventArrived);
     }
 }
