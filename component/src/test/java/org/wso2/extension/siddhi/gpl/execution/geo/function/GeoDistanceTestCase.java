@@ -27,16 +27,19 @@ import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.util.EventPrinter;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class GeoDistanceTestCase {
     private static final Logger log = Logger.getLogger(GeoDistanceTestCase.class);
-    private volatile int count;
+    private AtomicInteger count = new AtomicInteger(0);
     private volatile boolean eventArrived;
 
     @BeforeMethod
     public void init() {
-        count = 0;
+        count.set(0);
         eventArrived = false;
     }
 
@@ -59,11 +62,11 @@ public class GeoDistanceTestCase {
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
-                    count++;
-                    if (count == 1) {
+                    count.incrementAndGet();
+                    if (count.get() == 1) {
                         AssertJUnit.assertEquals(2322119.848252557, event.getData(0));
                         eventArrived = true;
-                    } else if (count == 2) {
+                    } else if (count.get() == 2) {
                         AssertJUnit.assertEquals(871946.8734223971, event.getData(0));
                         eventArrived = true;
                     }
@@ -78,9 +81,9 @@ public class GeoDistanceTestCase {
         Thread.sleep(500);
         //getting distance away from equator
         inputHandler.send(new Object[]{54.432063, 19.669778, 59.971487, 29.958951});
-        Thread.sleep(100);
+        SiddhiTestHelper.waitForEvents(100, 2, count, 60000);
 
-        AssertJUnit.assertEquals(2, count);
+        AssertJUnit.assertEquals(2, count.get());
         AssertJUnit.assertTrue(eventArrived);
         siddhiAppRuntime.shutdown();
     }

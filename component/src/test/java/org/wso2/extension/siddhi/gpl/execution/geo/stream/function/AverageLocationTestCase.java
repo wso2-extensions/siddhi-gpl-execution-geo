@@ -28,15 +28,17 @@ import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.util.EventPrinter;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class AverageLocationTestCase {
     private static final Logger log = Logger.getLogger(AverageLocationTestCase.class);
-    private volatile int count;
+    private AtomicInteger count = new AtomicInteger(0);
     private volatile boolean eventArrived;
 
     @BeforeMethod
     public void init() {
-        count = 0;
+        count.set(0);
         eventArrived = false;
     }
 
@@ -60,21 +62,21 @@ public class AverageLocationTestCase {
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
-                    count++;
-                    if (count == 1) {
+                    count.incrementAndGet();
+                    if (count.get() == 1) {
                         AssertJUnit.assertEquals(6.876657000000001, event.getData(7));
                         AssertJUnit.assertEquals(79.897648, event.getData(8));
                         eventArrived = true;
-                    } else if (count == 2) {
+                    } else if (count.get() == 2) {
                         AssertJUnit.assertEquals(6.797727042508542, event.getData(7));
                         AssertJUnit.assertEquals(80.13557409252783, event.getData(8));
                         eventArrived = true;
-                    } else if (count == 3) {
+                    } else if (count.get() == 3) {
                         AssertJUnit.assertEquals(6.853572272662002, event.getData(7));
                         AssertJUnit.assertEquals(true, 80.34826512892124 == (Double) event.getData(8) ||
                                 80.34826512892126 == (Double) event.getData(8));
                         eventArrived = true;
-                    } else if (count == 4) {
+                    } else if (count.get() == 4) {
                         AssertJUnit.assertEquals(true, 8.026326160526303 == (Double) event.getData(7) ||
                                 8.0263261605263 == (Double) event.getData(7));
                         AssertJUnit.assertEquals(80.42794459517538, event.getData(8));
@@ -96,7 +98,7 @@ public class AverageLocationTestCase {
         inputHandler.send(new Object[]{"person1", 8.729925, 80.475966, "ENTER", "uuid4", 100.0d, 1452583941L});
         Thread.sleep(100);
 
-        AssertJUnit.assertEquals(4, count);
+        AssertJUnit.assertEquals(4, count.get());
         AssertJUnit.assertTrue(eventArrived);
         siddhiAppRuntime.shutdown();
     }
@@ -121,21 +123,21 @@ public class AverageLocationTestCase {
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
-                    count++;
-                    if (count == 1) {
+                    count.incrementAndGet();
+                    if (count.get() == 1) {
                         AssertJUnit.assertEquals(6.876657000000001, event.getData(7));
                         AssertJUnit.assertEquals(79.897648, event.getData(8));
                         eventArrived = true;
-                    } else if (count == 2) {
+                    } else if (count.get() == 2) {
                         AssertJUnit.assertEquals(6.797727042508542, event.getData(7));
                         AssertJUnit.assertEquals(80.13557409252783, event.getData(8));
                         eventArrived = true;
-                    } else if (count == 3) {
+                    } else if (count.get() == 3) {
                         AssertJUnit.assertEquals(6.853572272662002, event.getData(7));
                         AssertJUnit.assertEquals(true, 80.34826512892124 == (Double) event.getData(8) ||
                                 80.34826512892126 == (Double) event.getData(8));
                         eventArrived = true;
-                    } else if (count == 4) {
+                    } else if (count.get() == 4) {
                         AssertJUnit.assertEquals(7.322639705655454, event.getData(7));
                         AssertJUnit.assertEquals(80.38008364787895, event.getData(8));
                         eventArrived = true;
@@ -156,7 +158,7 @@ public class AverageLocationTestCase {
         inputHandler.send(new Object[]{"person1", 8.729925, 80.475966, "ENTER", "uuid4", 20.0d, 1452583941L});
         Thread.sleep(100);
 
-        AssertJUnit.assertEquals(4, count);
+        AssertJUnit.assertEquals(4, count.get());
         AssertJUnit.assertTrue(eventArrived);
         siddhiAppRuntime.shutdown();
     }

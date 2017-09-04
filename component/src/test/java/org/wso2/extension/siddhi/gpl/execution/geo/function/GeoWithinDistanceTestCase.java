@@ -19,14 +19,26 @@ package org.wso2.extension.siddhi.gpl.execution.geo.function;
 
 import org.apache.log4j.Logger;
 import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.gpl.execution.geo.GeoTestCase;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeoWithinDistanceTestCase extends GeoTestCase {
     private static Logger logger = Logger.getLogger(GeoWithinDistanceTestCase.class);
+    private AtomicInteger count = new AtomicInteger(0);
+    private volatile boolean eventArrived;
+
+    @BeforeMethod
+    public void init() {
+        count.set(0);
+        eventArrived = false;
+    }
 
     @Test
     public void testGeometry() throws Exception {
@@ -61,15 +73,37 @@ public class GeoWithinDistanceTestCase extends GeoTestCase {
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 for (Event event : inEvents) {
                     logger.info(event);
-                    Boolean isWithin = (Boolean) event.getData(0);
-                    AssertJUnit.assertEquals(expectedResult.get(eventCount++), isWithin);
+                    count.incrementAndGet();
+                    if (count.get() == 1) {
+                        Boolean isWithin = (Boolean) event.getData(0);
+                        AssertJUnit.assertEquals(expectedResult.get(eventCount++), isWithin);
+                        eventArrived = true;
+                    }
+                    if (count.get() == 2) {
+                        Boolean isWithin = (Boolean) event.getData(0);
+                        AssertJUnit.assertEquals(expectedResult.get(eventCount++), isWithin);
+                        eventArrived = true;
+                    }
+                    if (count.get() == 3) {
+                        Boolean isWithin = (Boolean) event.getData(0);
+                        AssertJUnit.assertEquals(expectedResult.get(eventCount++), isWithin);
+                        eventArrived = true;
+
+                    }
+                    if (count.get() == 4) {
+                        Boolean isWithin = (Boolean) event.getData(0);
+                        AssertJUnit.assertEquals(expectedResult.get(eventCount++), isWithin);
+                        eventArrived = true;
+
+                    }
                 }
             }
         });
         siddhiAppRuntime.start();
         generateEvents(siddhiAppRuntime);
-        Thread.sleep(1000);
-        AssertJUnit.assertEquals(expectedResult.size(), eventCount);
+        SiddhiTestHelper.waitForEvents(100, 4, count, 60000);
+        AssertJUnit.assertEquals(4, count.get());
+        AssertJUnit.assertTrue(eventArrived);
     }
 }
 

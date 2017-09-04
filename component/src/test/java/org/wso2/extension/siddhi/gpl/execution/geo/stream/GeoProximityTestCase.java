@@ -18,23 +18,35 @@
 package org.wso2.extension.siddhi.gpl.execution.geo.stream;
 
 import org.apache.log4j.Logger;
+import org.testng.Assert;
 import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.gpl.execution.geo.GeoTestCase;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.util.EventPrinter;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeoProximityTestCase extends GeoTestCase {
     private static Logger logger = Logger.getLogger(GeoProximityTestCase.class);
+    private AtomicInteger count = new AtomicInteger(0);
+    private volatile boolean eventArrived;
     private ArrayList<HashMap<String, Boolean>> expectedResultList = new ArrayList<HashMap<String, Boolean>>();
     private HashMap<String, Boolean> map1 = new HashMap<String, Boolean>();
     private HashMap<String, Boolean> map2 = new HashMap<String, Boolean>();
     private HashMap<String, Boolean> map3 = new HashMap<String, Boolean>();
+
+    @BeforeMethod
+    public void init() {
+        count.set(0);
+        eventArrived = false;
+    }
 
     @Test
     public void testProximity() throws Exception {
@@ -77,18 +89,21 @@ public class GeoProximityTestCase extends GeoTestCase {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
+                count.incrementAndGet();
                 for (Event event : inEvents) {
                     Boolean proximity = (Boolean) event.getData(0);
                     String other = (String) event.getData(1);
                     AssertJUnit.assertTrue(expectedResultList.get(eventCount).containsKey(other));
                     AssertJUnit.assertEquals(expectedResultList.get(eventCount).get(other), proximity);
+                    eventArrived = true;
                 }
                 eventCount++;
             }
         });
         siddhiAppRuntime.start();
         generateEvents(siddhiAppRuntime);
-        Thread.sleep(1000);
-        AssertJUnit.assertEquals(expectedResultList.size(), eventCount);
+        SiddhiTestHelper.waitForEvents(100, 3, count, 60000);
+        AssertJUnit.assertEquals(expectedResultList.size(), count.get());
+        Assert.assertTrue(eventArrived);
     }
 }
