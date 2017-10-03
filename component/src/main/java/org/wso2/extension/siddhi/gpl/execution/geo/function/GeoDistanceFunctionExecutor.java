@@ -87,15 +87,6 @@ import java.util.Map;
 public class GeoDistanceFunctionExecutor extends FunctionExecutor {
     Attribute.Type returnType = Attribute.Type.DOUBLE;
 
-    @Override
-    public void start() {
-
-    }
-
-    @Override
-    public void stop() {
-
-    }
 
     @Override
     public Map<String, Object> currentState() {
