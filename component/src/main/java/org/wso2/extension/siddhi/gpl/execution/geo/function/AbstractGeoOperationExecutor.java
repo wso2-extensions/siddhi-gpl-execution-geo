@@ -72,23 +72,6 @@ public abstract class AbstractGeoOperationExecutor extends FunctionExecutor {
         throw new IllegalStateException(this.getClass().getCanonicalName() + " cannot execute data " + data);
     }
 
-    /**
-     * This will be called only once, to acquire required resources
-     * after initializing the system and before processing the events.
-     */
-    @Override
-    public void start() {
-
-    }
-
-    /**
-     * This will be called only once, to release the acquired resources
-     * before shutting down the system.
-     */
-    @Override
-    public void stop() {
-
-    }
 
     /**
      * The serializable state of the element, that need to be
