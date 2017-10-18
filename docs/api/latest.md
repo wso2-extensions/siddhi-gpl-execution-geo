@@ -1,0 +1,669 @@
+# API Docs - v4.0.4
+
+## Geo
+
+### within *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*
+
+<p style="word-wrap: break-word">This function can be call using two sets of parameters.<br>&nbsp;This will returns true if the location specified in terms of longitude and latitude is within the geo.json.geometry.fence. <br>&nbsp;Or returns true if the geo.json.geometry is within the geo.json.geometry.fence.Returns false otherwise </p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+<BOOL> geo:within(<DOUBLE> longitude, <DOUBLE> latitude, <STRING> geo.json.geometry, <STRING> geo.json.geometry.fence)
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">longitude value of the geolocation </td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">latitude value of the geo location</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">geo.json.geometry</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts a json as a string which contains the geometry type and coordinates of a geo geometry. This can be given instead of longitude and latitude values</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">geo.json.geometry.fence</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts a json as a string which contains the geometry type and coordinates of a geo geometry fence</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+within(0.5, 0.5, {'type':'Polygon','coordinates':[[[0,0],[0,2],[1,2],[1,0],[0,0]]]} )
+```
+<p style="word-wrap: break-word">This will returns true since given longitude and latitude values are within the geo.json.geometry.fence </p>
+
+<span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span>
+```
+within( {'type': 'Circle', 'radius': 110575, 'coordinates':[1.5, 1.5]} , {'type':'Polygon','coordinates':[[[0,0],[0,4],[3,4],[3,0],[0,0]]]} )
+```
+<p style="word-wrap: break-word">Returns true since geo.json.geometry is within the geo.json.geometry.fence.</p>
+
+### withinDistance *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*
+
+<p style="word-wrap: break-word">This function can be call using two sets of parameters. <br>&nbsp;First method will returns true if the location specified in terms of longitude and latitude is within distance of the geo.json.geometry.fence. Returns false otherwise. <br>&nbsp;Second method will return true if the area given by geo.json.geometry is within distance of the geo.json.geometry.fence. <br>&nbsp;please refer examples </p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+<BOOL> geo:withinDistance(<DOUBLE> longitude, <DOUBLE> latitude, <STRING> geo.json.geometry, <STRING> geo.json.geometry.fence)
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">longitude value of the geolocation </td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">latitude value of the geo location</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">geo.json.geometry</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts a json as a string which contains the geometry type and coordinates of a geo geometry. This can be given instead of longitude and latitude values</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">geo.json.geometry.fence</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts a json as a string which contains the geometry type and coordinates of a geo geometry fence</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+withindistance( 0.5 , 0.5, {'type':'Polygon','coordinates':[[[0, 0],[0, 1],[1, 1],[1, 0],[0, 0]]]}, 110574.61087757687)
+```
+<p style="word-wrap: break-word">This will returns true because the location specified in terms of longitude and latitude is within the distance of the geo.json.geometry.fence.</p>
+
+<span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span>
+```
+withindistance( {'type':'Polygon','coordinates':[[[0.5, 0.5],[0.5, 1.5],[1.5, 1.5],[1.5, 0.5],[0.5, 0.5]]]} , {'type':'Polygon','coordinates':[[[0, 0],[0, 1],[1, 1],[1, 0],[0, 0]]]}, 110574.61087757687)
+```
+<p style="word-wrap: break-word">This will returns true because geo.json.geometry is within the distance of geo.json.geometry.fence.</p>
+
+### intersects *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*
+
+<p style="word-wrap: break-word">This function can be called using two sets of parameters. <br>&nbsp;First method will return true if the incoming event geo.json.geometry intersects the given geo.json.geometryFence else false.<br>&nbsp;Second method will return true if the location pointed by longitude and latitude intersects the given geo.json.geometryFence else false <br>&nbsp;Please refer examples</p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+<BOOL> geo:intersects(<DOUBLE> longitude, <DOUBLE> latitude, <STRING> geo.json.geometry, <STRING> geo.json.geometry.fence)
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts the longitude value of the geo location as a double, This and the latitude value can be given instead of giving geo.json.geometry value </td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts the latitude value of the geo location as a double. </td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">geo.json.geometry</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts a json as a string which contains the geometry type and coordinates of a geo geometry. This can be given instead of the longitude and latitude values  </td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">geo.json.geometry.fence</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts a json as a string which contains the geometry type and coordinates of a geo geometry fence</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+intersects( {'type':'Polygon','coordinates':[[[0.5, 0.5],[0.5, 1.5],[1.5, 1.5],[1.5, 0.5],[0.5, 0.5]]]} , {'type':'Polygon','coordinates':[[[0, 0],[0, 1],[1, 1],[1, 0],[0, 0]]]} )
+```
+<p style="word-wrap: break-word">returns true because geo.json.geometry intersects geo.json.geometry.fence</p>
+
+<span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span>
+```
+ intersects(0.5. 0.5 , {'type':'Polygon','coordinates':[[[0, 0],[0, 1],[1, 1],[1, 0],[0, 0]]]})
+```
+<p style="word-wrap: break-word">returns true because location pointed by longitude and latitude intersects geo.json.geometry.fence</p>
+
+### distance *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*
+
+<p style="word-wrap: break-word">This method gives the distance between two geo locations in meters</p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+<DOUBLE> geo:distance(<DOUBLE> location1.latitude, <DOUBLE> location1.longitude, <DOUBLE> location2.latitude, <DOUBLE> location2.longitude)
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">location1.latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">latitude value of 1st location</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">location1.longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">longitude value of 1st location</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">location2.latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">latitude value of 2nd location</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">location2.longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">longitude value of 2nd location</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+geo:distance(latitude, longitude, prevLatitude, prevLongitude)
+```
+<p style="word-wrap: break-word">This will returns the distance in meters</p>
+
+### stationary *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
+
+<p style="word-wrap: break-word">Returns true when the object (defined in terms of  longitude  and latitude) becomes stationary within the specified radius. Returns false when the object moves out of the specified radius.</p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+geo:stationary(<STRING> id, <DOUBLE> longitude, <DOUBLE> latitude, <STRING> geo.json.geometry.fence, <DOUBLE> radius)
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">id</td>
+        <td style="vertical-align: top; word-wrap: break-word">object id which is defined in terms of longitude and latitude</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">longitude of the location as a double</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">latitude of the location as a double</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">geo.json.geometry.fence</td>
+        <td style="vertical-align: top; word-wrap: break-word">string value of the json object which contains the details of the geo geometry fence. This is </td>
+        <td style="vertical-align: top"> </td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">radius</td>
+        <td style="vertical-align: top; word-wrap: break-word">specific radius as a double value</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+<span id="extra-return-attributes" class="md-typeset" style="display: block; font-weight: bold;">Extra Return Attributes</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Possible Types</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">isStationary</td>
+        <td style="vertical-align: top; word-wrap: break-word">This will return a boolean value</td>
+        <td style="vertical-align: top">BOOL</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+stationary(km-4354,0,0, 110574.61087757687)
+```
+<p style="word-wrap: break-word">returns true</p>
+
+### proximity *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
+
+<p style="word-wrap: break-word">This will returns true when two objects (specified in terms of longitude and latitude) are within the specified radius to another object. Returns false when the specified object moves out of the specified radius. The proximityWith optional attribute indicates the ID of the object that the object specified is in close proximity with. proximityID is a unique ID for the two objects in close proximity.</p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+geo:proximity(<STRING> id, <DOUBLE> longitude, <DOUBLE> latitude, <STRING> geo.json.geometry.fence, <DOUBLE> radius)
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">id</td>
+        <td style="vertical-align: top; word-wrap: break-word">id of the object</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">longitude value of the location</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">latitude value of the location</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">geo.json.geometry.fence</td>
+        <td style="vertical-align: top; word-wrap: break-word">string value of the json object which contains the details of the geo geometry fence.</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">radius</td>
+        <td style="vertical-align: top; word-wrap: break-word">specific radius as a double value</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+<span id="extra-return-attributes" class="md-typeset" style="display: block; font-weight: bold;">Extra Return Attributes</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Possible Types</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">isWithinProximity</td>
+        <td style="vertical-align: top; word-wrap: break-word">This will return a boolean value</td>
+        <td style="vertical-align: top">BOOL</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+proximity(1, 0, 0, 110574.61087757687)
+```
+<p style="word-wrap: break-word">This will return true since given longitude and latitude is within the radius</p>
+
+### crosses *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
+
+<p style="word-wrap: break-word">Returns true when the  the specified object of which the location is specified  in terms of longitude  and  latitude crosses the geographic location specified in geo.json.geometry.fence. Returns false when the object crosses out of the location specified in geo.json.geometry.fence. <br>&nbsp;Or Returns true when the object (i.e. geo.json.geometry) crosses the specified geographic location (i.e. geo.json.geometry.fence). Returns false when the object crosses out of geo.json.geometry.fence. </p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+geo:crosses(<STRING> id, <DOUBLE> longitude, <DOUBLE> latitude, <STRING> geo.json.geometry, <STRING> geo.json.geometry.fence)
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">id</td>
+        <td style="vertical-align: top; word-wrap: break-word">location id</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts the longitude value of the geo location as a double, This and the latitude value can be given instead of giving geo.json.geometry value </td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts the latitude value of the geo location as a double. </td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">geo.json.geometry</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts a json as a string which contains the geometry type and coordinates of a geo geometry.This can be given instead of the longitude and latitude values</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">geo.json.geometry.fence</td>
+        <td style="vertical-align: top; word-wrap: break-word">this will accepts a json as a string which contains the geometry type and coordinates of a geo geometry fence</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+<span id="extra-return-attributes" class="md-typeset" style="display: block; font-weight: bold;">Extra Return Attributes</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Possible Types</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">isCrossed</td>
+        <td style="vertical-align: top; word-wrap: break-word">This will return a boolean value</td>
+        <td style="vertical-align: top">BOOL</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+crosses(km-4354, -0.5, 0.5, {'type':'Polygon','coordinates':[[[0, 0],[2, 0],[2, 1],[0, 1],[0, 0]]]} )
+```
+<p style="word-wrap: break-word">This will return true since the specified location crosses the geo.json.geometry.fence</p>
+
+### locationApproximate *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-function">(Stream Function)</a>*
+
+<p style="word-wrap: break-word">Geo Location Approximation compute the average location of the locationRecorder using the collection iBeacons which the location recorder resides.</p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+geo:locationApproximate(<STRING> location.recorder, <DOUBLE> latitude, <DOUBLE> longitude, <STRING> sensor.proximity, <STRING> sensor.uuid, <DOUBLE> sensor.weight, <LONG> timestamp)
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">location.recorder</td>
+        <td style="vertical-align: top; word-wrap: break-word">unique id of the object or item</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">latitude value of the iBeacon</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">longitude value of the iBeacon</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">sensor.proximity</td>
+        <td style="vertical-align: top; word-wrap: break-word">proximity which will be given by the iBeacon (eg: ENTER, RANGE, EXIT)</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">sensor.uuid</td>
+        <td style="vertical-align: top; word-wrap: break-word">unique id of the iBeacon</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">sensor.weight</td>
+        <td style="vertical-align: top; word-wrap: break-word">weight of the iBeacon which influence the averaging of the location (eg: approximate distance from the iBeacon</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">timestamp</td>
+        <td style="vertical-align: top; word-wrap: break-word">timestamp of the log which will be used to remove iBeacon from one's collection when there is no new log for 5 minutes</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">LONG</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+geoLocationApproximate("person1", 6.876657, 79.897648, "ENTER", "uuid1", 20.0d, 1452583935L)
+```
+<p style="word-wrap: break-word">this will return 6.876657000000001 as the approximated location </p>
+
+### closestPoints *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-function">(Stream Function)</a>*
+
+<p style="word-wrap: break-word">This will return the closest geo point to the geo.json.geometry.fence</p>
+
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+```
+geo:closestPoints(<DOUBLE> longitude, <DOUBLE> latitude, <STRING> geo.json.geometry.fence)
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">longitude value of the location</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">latitude value of the location</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">geo.json.geometry.fence</td>
+        <td style="vertical-align: top; word-wrap: break-word">string value of the json object which contains the details of the geo geometry fence.</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+<span id="extra-return-attributes" class="md-typeset" style="display: block; font-weight: bold;">Extra Return Attributes</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Possible Types</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">closestPointOf1From2Latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">closest point's latitude to the fence from the location</td>
+        <td style="vertical-align: top">DOUBLE</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">closestPointOf1From2Longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">closest point's longitude to the fence from the location</td>
+        <td style="vertical-align: top">DOUBLE</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">closestPointOf2From1Latitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">closest point's latitude to the location from the fence</td>
+        <td style="vertical-align: top">DOUBLE</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">closestPointOf2From1Longitude</td>
+        <td style="vertical-align: top; word-wrap: break-word">closest point's longitude to the location from the fence</td>
+        <td style="vertical-align: top">DOUBLE</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+closestPoints(0.5,0.5,"{'type':'Polygon','coordinates':[[[0,0],[0,2],[1,2],[1,0],[0,0]]]}")
+```
+<p style="word-wrap: break-word">this will return 0.5, 0.5, 0.5, 0.5 </p>
+
