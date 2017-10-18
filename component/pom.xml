@@ -105,7 +105,6 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -209,8 +208,6 @@
     </build>
 
     <properties>
-        <text.mapper.version>4.0.0-M5</text.mapper.version>
-        <testng.version>6.8</testng.version>
         <mavan.findbugsplugin.exclude.file>../findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
     </properties>
 </project>
