@@ -10,7 +10,7 @@ repo_name: Siddhi-GPL-Execution-Geo
 repo_url: https://github.com/wso2-extensions/siddhi-gpl-execution-geo
 copyright: Copyright &copy; 2011 - 2018 WSO2
 theme:
-  name: 'material'
+  name: material
   logo: images/siddhi-logo-w.svg
   favicon: images/favicon.ico
   palette:
@@ -26,8 +26,9 @@ extra:
   - type: linkedin
     link: https://www.linkedin.com/groups/13553064
 pages:
-- Welcome : index.md
+- Welcome: index.md
 - API Docs:
+  - 4.0.13: api/4.0.13.md
   - 4.0.12: api/4.0.12.md
   - 4.0.11: api/4.0.11.md
   - 4.0.10: api/4.0.10.md
