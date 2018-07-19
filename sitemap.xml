@@ -1,84 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-    
     <url>
-     <loc>/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
-        
     <url>
-     <loc>/api/4.0.12/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/api/4.0.13/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/4.0.11/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/api/4.0.12/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/4.0.10/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/api/4.0.11/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/4.0.9/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/api/4.0.10/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/4.0.8/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/api/4.0.9/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/4.0.7/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/api/4.0.8/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/4.0.6/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/api/4.0.7/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/4.0.5/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/api/4.0.6/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/4.0.4/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/api/4.0.5/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/latest/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/api/4.0.4/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
-    
-
-    
     <url>
-     <loc>/license/</loc>
-     <lastmod>2018-06-15</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/api/latest/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
+    <url>
+     <loc>https://wso2-extensions.github.io/siddhi-gpl-execution-geo/license/</loc>
+     <lastmod>2018-07-19</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
 </urlset>
