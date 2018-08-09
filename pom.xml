@@ -26,7 +26,7 @@
 
     <groupId>org.wso2.extension.siddhi.gpl.execution.geo</groupId>
     <artifactId>siddhi-gpl-execution-geo-parent</artifactId>
-    <version>4.0.14-SNAPSHOT</version>
+    <version>4.0.14</version>
     <packaging>pom</packaging>
     <name>Siddhi Execution Extension - Geo Aggregator Parent</name>
 
@@ -56,7 +56,7 @@
         <url>https://github.com/wso2-extensions/siddhi-gpl-execution-geo.git</url>
         <developerConnection>scm:git:https://github.com/wso2-extensions/siddhi-gpl-execution-geo.git
         </developerConnection>
-        <tag>HEAD</tag>
+        <tag>v4.0.14</tag>
     </scm>
 
     <dependencyManagement>
