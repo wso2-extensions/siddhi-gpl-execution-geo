@@ -50,7 +50,6 @@ public class GeoClosetPointTestCase extends GeoTestCase {
 
         data.clear();
         expectedResult.clear();
-//        eventCount = 0;
         data.add(new Object[]{"km-4354", 0.5d, 0.5d});
         expectedResult.add(true);
         data.add(new Object[]{"km-4354", 2d, 2d});
@@ -108,7 +107,6 @@ public class GeoClosetPointTestCase extends GeoTestCase {
                             AssertJUnit.assertArrayEquals(new Object[]{-1.0, -1.0, 0.0, 0.0}, event.getData());
                             eventArrived = true;
                             break;
-
                     }
                 }
             }
@@ -118,6 +116,7 @@ public class GeoClosetPointTestCase extends GeoTestCase {
         SiddhiTestHelper.waitForEvents(100, 6, count, 60000);
         AssertJUnit.assertEquals(expectedResult.size(), count.get());
         AssertJUnit.assertTrue(eventArrived);
+        siddhiAppRuntime.shutdown();
     }
 
 
@@ -187,7 +186,6 @@ public class GeoClosetPointTestCase extends GeoTestCase {
                             AssertJUnit.assertArrayEquals(new Object[]{10.0, 10.0, 3.0, 4.0}, event.getData());
                             eventArrived = true;
                             break;
-
                     }
                 }
             }
@@ -197,5 +195,6 @@ public class GeoClosetPointTestCase extends GeoTestCase {
         SiddhiTestHelper.waitForEvents(100, 6, count, 60000);
         AssertJUnit.assertEquals(expectedResult.size(), count.get());
         AssertJUnit.assertTrue(eventArrived);
+        siddhiAppRuntime.shutdown();
     }
 }

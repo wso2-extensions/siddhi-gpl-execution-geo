@@ -94,7 +94,6 @@ public class GeoWithinDistanceTestCase extends GeoTestCase {
                         Boolean isWithin = (Boolean) event.getData(0);
                         AssertJUnit.assertEquals(expectedResult.get(eventCount++), isWithin);
                         eventArrived = true;
-
                     }
                 }
             }
@@ -104,6 +103,7 @@ public class GeoWithinDistanceTestCase extends GeoTestCase {
         SiddhiTestHelper.waitForEvents(100, 4, count, 60000);
         AssertJUnit.assertEquals(4, count.get());
         AssertJUnit.assertTrue(eventArrived);
+        siddhiAppRuntime.shutdown();
     }
 }
 

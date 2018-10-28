@@ -119,6 +119,7 @@ public class GeoWithinTestCase extends GeoTestCase {
         SiddhiTestHelper.waitForEvents(100, 6, count, 60000);
         AssertJUnit.assertEquals(6, count.get());
         AssertJUnit.assertTrue(eventArrived);
+        siddhiAppRuntime.shutdown();
     }
 
     @Test
@@ -202,6 +203,7 @@ public class GeoWithinTestCase extends GeoTestCase {
         SiddhiTestHelper.waitForEvents(100, 6, count, 60000);
         AssertJUnit.assertEquals(6, count.get());
         AssertJUnit.assertTrue(eventArrived);
+        siddhiAppRuntime.shutdown();
     }
 
     @Test
@@ -281,6 +283,7 @@ public class GeoWithinTestCase extends GeoTestCase {
         SiddhiTestHelper.waitForEvents(100, 6, count, 60000);
         AssertJUnit.assertEquals(6, count.get());
         AssertJUnit.assertTrue(eventArrived);
+        siddhiAppRuntime.shutdown();
     }
 
     @Test
@@ -368,6 +371,7 @@ public class GeoWithinTestCase extends GeoTestCase {
         SiddhiTestHelper.waitForEvents(100, 6, count, 60000);
         AssertJUnit.assertEquals(6, count.get());
         AssertJUnit.assertTrue(eventArrived);
+        siddhiAppRuntime.shutdown();
     }
 
     @Test
@@ -408,7 +412,6 @@ public class GeoWithinTestCase extends GeoTestCase {
             }
         });
         siddhiAppRuntime.start();
-
         dataToTable.send(new Object[]{"1", "{'type': 'Circle', 'radius': 110575, 'coordinates':[1.5, 1.5]}"});
         dataToTable.send(new Object[]{"2", "{'type': 'Circle', 'radius': 110575, 'coordinates':[12.5, 1.5]}"});
         dataIn.send(new Object[]{"3", 1.5, 1.0});

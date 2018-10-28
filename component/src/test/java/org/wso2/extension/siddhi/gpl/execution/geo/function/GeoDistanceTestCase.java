@@ -82,7 +82,6 @@ public class GeoDistanceTestCase {
         //getting distance away from equator
         inputHandler.send(new Object[]{54.432063, 19.669778, 59.971487, 29.958951});
         SiddhiTestHelper.waitForEvents(100, 2, count, 60000);
-
         AssertJUnit.assertEquals(2, count.get());
         AssertJUnit.assertTrue(eventArrived);
         siddhiAppRuntime.shutdown();
