@@ -105,5 +105,6 @@ public class GeoProximityTestCase extends GeoTestCase {
         SiddhiTestHelper.waitForEvents(100, 3, count, 60000);
         AssertJUnit.assertEquals(expectedResultList.size(), count.get());
         Assert.assertTrue(eventArrived);
+        siddhiAppRuntime.shutdown();
     }
 }

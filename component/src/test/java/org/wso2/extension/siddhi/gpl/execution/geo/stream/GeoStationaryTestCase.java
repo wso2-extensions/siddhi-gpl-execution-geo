@@ -90,5 +90,6 @@ public class GeoStationaryTestCase extends GeoTestCase {
         SiddhiTestHelper.waitForEvents(100, 3, count, 60000);
         AssertJUnit.assertEquals(expectedResult.size(), count.get());
         Assert.assertTrue(eventArrived);
+        siddhiAppRuntime.shutdown();
     }
 }
