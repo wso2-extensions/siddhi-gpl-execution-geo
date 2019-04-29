@@ -18,24 +18,24 @@
 package org.wso2.extension.siddhi.gpl.execution.geo.stream.function;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.ReturnAttribute;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.query.processor.stream.function.StreamFunctionProcessor;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.AbstractDefinition;
+import io.siddhi.query.api.definition.Attribute;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.ClosestOperation;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.GeoOperation;
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.ReturnAttribute;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.query.processor.stream.function.StreamFunctionProcessor;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.query.api.definition.AbstractDefinition;
-import org.wso2.siddhi.query.api.definition.Attribute;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Find the closest geo point
@@ -77,23 +77,10 @@ import java.util.Map;
                         " the location from the fence", type = {DataType.DOUBLE})
         }
 )
-public class GeoClosestPointsStreamFunctionProcessor extends StreamFunctionProcessor {
+public class GeoClosestPointsStreamFunctionProcessor extends StreamFunctionProcessor<State> {
 
     GeoOperation geoOperation;
-
-    @Override
-    protected List<Attribute> init(AbstractDefinition abstractDefinition, ExpressionExecutor[] expressionExecutors,
-                                   ConfigReader configReader,
-                                   SiddhiAppContext siddhiAppContext) {
-        this.geoOperation = new ClosestOperation();
-        this.geoOperation.init(attributeExpressionExecutors, 0, attributeExpressionExecutors.length);
-        List<Attribute> attributeList = new ArrayList<Attribute>(4);
-        attributeList.add(new Attribute("closestPointOf1From2Latitude", Attribute.Type.DOUBLE));
-        attributeList.add(new Attribute("closestPointOf1From2Longitude", Attribute.Type.DOUBLE));
-        attributeList.add(new Attribute("closestPointOf2From1Latitude", Attribute.Type.DOUBLE));
-        attributeList.add(new Attribute("closestPointOf2From1Longitude", Attribute.Type.DOUBLE));
-        return attributeList;
-    }
+    private List<Attribute> attributeList;
 
     @Override
     protected Object[] process(Object[] data) {
@@ -108,6 +95,20 @@ public class GeoClosestPointsStreamFunctionProcessor extends StreamFunctionProce
     }
 
     @Override
+    protected StateFactory<State> init(AbstractDefinition inputDefinition,
+                                       ExpressionExecutor[] attributeExpressionExecutors, ConfigReader configReader,
+                                       boolean outputExpectsExpiredEvents, SiddhiQueryContext siddhiQueryContext) {
+        this.geoOperation = new ClosestOperation();
+        this.geoOperation.init(attributeExpressionExecutors, 0, attributeExpressionExecutors.length);
+        attributeList = new ArrayList<Attribute>(4);
+        attributeList.add(new Attribute("closestPointOf1From2Latitude", Attribute.Type.DOUBLE));
+        attributeList.add(new Attribute("closestPointOf1From2Longitude", Attribute.Type.DOUBLE));
+        attributeList.add(new Attribute("closestPointOf2From1Latitude", Attribute.Type.DOUBLE));
+        attributeList.add(new Attribute("closestPointOf2From1Longitude", Attribute.Type.DOUBLE));
+        return null;
+    }
+
+    @Override
     public void start() {
 
     }
@@ -118,12 +119,7 @@ public class GeoClosestPointsStreamFunctionProcessor extends StreamFunctionProce
     }
 
     @Override
-    public Map<String, Object> currentState() {
-        return new HashMap<String, Object>();
-    }
-
-    @Override
-    public void restoreState(Map<String, Object> objects) {
-
+    public List<Attribute> getReturnAttributes() {
+        return attributeList;
     }
 }

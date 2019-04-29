@@ -20,7 +20,7 @@ package org.wso2.extension.siddhi.gpl.execution.geo.internal.util;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import com.vividsolutions.jts.operation.distance.DistanceOp;
-import org.wso2.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.definition.Attribute;
 /**
  *
  * return the nearest point.

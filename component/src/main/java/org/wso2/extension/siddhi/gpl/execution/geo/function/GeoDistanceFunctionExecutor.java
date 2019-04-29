@@ -17,21 +17,20 @@
 
 package org.wso2.extension.siddhi.gpl.execution.geo.function;
 
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.ReturnAttribute;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.executor.function.FunctionExecutor;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
-
-import java.util.HashMap;
-import java.util.Map;
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.ReturnAttribute;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.exception.SiddhiAppRuntimeException;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.executor.function.FunctionExecutor;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.exception.SiddhiAppValidationException;
 
 /**
  * geo:distance(location1Latitude, location1Longitude, location2Latitude, location2Longitude)
@@ -87,30 +86,19 @@ import java.util.Map;
 public class GeoDistanceFunctionExecutor extends FunctionExecutor {
     Attribute.Type returnType = Attribute.Type.DOUBLE;
 
-
     @Override
-    public Map<String, Object> currentState() {
-        return new HashMap<String, Object>();
-    }
-
-    @Override
-    public void restoreState(Map<String, Object> state) {
-
-    }
-
-    @Override
-    protected void init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader configReader,
-                        SiddhiAppContext siddhiAppContext) {
+    protected StateFactory init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader configReader,
+                                SiddhiQueryContext siddhiQueryContext) {
         if (attributeExpressionExecutors.length != 4) {
             throw new SiddhiAppValidationException("Invalid no of arguments passed to " +
                     "geo:distance() function, " +
                     "requires 4, but found " + attributeExpressionExecutors.length);
         }
+        return null;
     }
 
-
     @Override
-    protected Object execute(Object[] data) {
+    protected Object execute(Object[] data, State state) {
         if (data[0] == null) {
             throw new SiddhiAppRuntimeException("Invalid input given to geo:distance() " +
                     "function. First argument should be double");
@@ -147,7 +135,7 @@ public class GeoDistanceFunctionExecutor extends FunctionExecutor {
     }
 
     @Override
-    protected Object execute(Object data) {
+    protected Object execute(Object data, State state) {
         return null;
     }
 

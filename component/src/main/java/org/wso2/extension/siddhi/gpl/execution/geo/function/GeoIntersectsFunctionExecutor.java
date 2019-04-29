@@ -17,13 +17,12 @@
 
 package org.wso2.extension.siddhi.gpl.execution.geo.function;
 
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.ReturnAttribute;
+import io.siddhi.annotation.util.DataType;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.IntersectsOperation;
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.ReturnAttribute;
-import org.wso2.siddhi.annotation.util.DataType;
-
 
 /**
  * Calculate the geo intersection
