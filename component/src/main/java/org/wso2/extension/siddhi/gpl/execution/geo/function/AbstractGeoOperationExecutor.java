@@ -17,20 +17,19 @@
 
 package org.wso2.extension.siddhi.gpl.execution.geo.function;
 
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.executor.function.FunctionExecutor;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.Attribute.Type;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.GeoOperation;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.executor.function.FunctionExecutor;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.query.api.definition.Attribute.Type;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Parent class for the geo operations
  **/
-public abstract class AbstractGeoOperationExecutor extends FunctionExecutor {
+public abstract class AbstractGeoOperationExecutor extends FunctionExecutor<State> {
 
     GeoOperation geoOperation;
 
@@ -38,15 +37,15 @@ public abstract class AbstractGeoOperationExecutor extends FunctionExecutor {
      * The initialization method for FunctionExecutor, this method will be called before the other methods
      *
      * @param attributeExpressionExecutors are the executors of each function parameters
-     * @param siddhiAppContext             the context of the execution plan
+     * @param siddhiQueryContext             the context of the execution plan
      */
 
     @Override
-    protected void init(ExpressionExecutor[] attributeExpressionExecutors,
-                        ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
+    protected StateFactory<State> init(ExpressionExecutor[] attributeExpressionExecutors,
+                                       ConfigReader configReader, SiddhiQueryContext siddhiQueryContext) {
         this.geoOperation.init(attributeExpressionExecutors, 0, attributeExpressionExecutors.length);
+        return null;
     }
-
 
     /**
      * The main executions method which will be called upon event arrival
@@ -55,7 +54,7 @@ public abstract class AbstractGeoOperationExecutor extends FunctionExecutor {
      * @return
      */
     @Override
-    protected Object execute(Object[] data) {
+    protected Object execute(Object[] data, State state) {
         return geoOperation.process(data);
     }
 
@@ -68,37 +67,11 @@ public abstract class AbstractGeoOperationExecutor extends FunctionExecutor {
      * @return the function result
      */
     @Override
-    protected Object execute(Object data) {
+    protected Object execute(Object data, State state) {
         throw new IllegalStateException(this.getClass().getCanonicalName() + " cannot execute data " + data);
     }
 
-
-    /**
-     * The serializable state of the element, that need to be
-     * persisted for the reconstructing the element to the same state
-     * on a different point of time
-     *
-     * @return stateful objects of the element as an array
-     */
-    @Override
-    public Map<String, Object> currentState() {
-        return new HashMap<String, Object>();
-    }
-
-    /**
-     * The serialized state of the element, for reconstructing
-     * the element to the same state as if was on a previous point of time.
-     *
-     * @param state the stateful objects of the element as an array on
-     *              the same order provided by currentState().
-     */
-    @Override
-    public void restoreState(Map<String, Object> state) {
-
-    }
-
     //TODO: look into cloning
-
 
     public Type getReturnType() {
         return geoOperation.getReturnType();

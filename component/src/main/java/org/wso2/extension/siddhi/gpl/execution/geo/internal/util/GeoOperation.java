@@ -19,10 +19,10 @@ package org.wso2.extension.siddhi.gpl.execution.geo.internal.util;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.executor.ConstantExpressionExecutor;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.query.api.definition.Attribute;
+import io.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.executor.ConstantExpressionExecutor;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.query.api.definition.Attribute;
 /**
  * Operations related to the geometry
  *
@@ -91,5 +91,3 @@ public abstract class GeoOperation {
 
     public abstract Attribute.Type getReturnType();
 }
-
-

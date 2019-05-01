@@ -1,7 +1,7 @@
 siddhi-gpl-execution-geo
 ======================================
 
-The **siddhi-gpl-execution-geo extension** is an extension to <a target="_blank" href="https://wso2.github.io/siddhi">Siddhi</a> that provides geo data related functionality such as checking whether a given geo coordinate is within a predefined geo-fence, etc. Following are the functions of the Geo extension.
+The **siddhi-gpl-execution-geo extension** is an extension to <a target="_blank" href="https://wso2.github.io/siddhi">Siddhi</a> that provides geo data related functionality such as checking whether a given geo coordinate is within a predefined geo-fence, etc.
 
 
 Find some useful links below:

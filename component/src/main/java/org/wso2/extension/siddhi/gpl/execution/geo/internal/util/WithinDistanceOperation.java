@@ -19,7 +19,7 @@ package org.wso2.extension.siddhi.gpl.execution.geo.internal.util;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
-import org.wso2.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.definition.Attribute;
 /**
  * check whether the given area is within distance the another area
  * **/

@@ -17,18 +17,20 @@
 
 package org.wso2.extension.siddhi.gpl.execution.geo.stream;
 
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.query.processor.stream.function.StreamFunctionProcessor;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.query.api.definition.AbstractDefinition;
-import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.exception.SiddhiAppRuntimeException;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.query.processor.stream.function.StreamFunctionProcessor;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.AbstractDefinition;
+import io.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.exception.SiddhiAppValidationException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +38,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * geoLocationApproximate(location.recorder, latitude, longitude, sensor.proximity,
+ * sensor.uuid, sensor.weight, timestamp)
+ * <p>
+ * This method computed the average location of the locationRecorder using the collection iBeacons which the location
+ * recorder resides.
+ * <p>
+ * location.recorder - unique id of the object or item
+ * latitude         - latitude value of the iBeacon
+ * longitude        - longitude value of the iBeacon
+ * sensor.proximity  - proximity which will be given by the iBeacon (eg: ENTER, RANGE, EXIT)
+ * sensor.uuid       - unique id of the iBeacon
+ * sensor.weight     - weight of the iBeacon which influence the averaging of the location (eg: approximate distance
+ * from the beacon
+ * timestamp        - timestamp of the log which will be used to remove iBeacon from one's collection when there is no
+ * new log for 5 minutes
+ * <p>
+ * Accept Type(s) for geoLocationApproximate(location.recorder, latitude, longitude, sensor.proximity, sensor.uuid,
+ * sensor.weight, timestamp);
+ * location.recorder : STRING
+ * latitude : DOUBLE
+ * longitude : DOUBLE
+ * sensor.proximity : STRING
+ * sensor.uuid : STRING
+ * sensor.weight : DOUBLE
+ * timestamp : LONG
+ * <p>
+ * Return Type(s): DOUBLE, DOUBLE, BOOL
+ */
 /**
  * geoLocationApproximate(location.recorder, latitude, longitude, sensor.proximity,
  * sensor.uuid, sensor.weight, timestamp)
@@ -116,11 +147,13 @@ import java.util.concurrent.ConcurrentHashMap;
         }
 
 )
-public class GeoLocationApproximateStreamProcessor extends StreamFunctionProcessor {
+public class GeoLocationApproximateStreamProcessor
+        extends StreamFunctionProcessor<GeoLocationApproximateStreamProcessor.ExtensionState> {
+
+    private Map<String, Map<String, BeaconValueHolder>> personSpecificRecordLocatorMaps;
 
     //locationRecorder,uuid -> BeaconValueHolder
-    private Map<String, Map<String, BeaconValueHolder>>
-            personSpecificRecordLocatorMaps;
+    private ArrayList<Attribute> attributes;
 
     @Override
     public void start() {
@@ -129,23 +162,6 @@ public class GeoLocationApproximateStreamProcessor extends StreamFunctionProcess
 
     @Override
     public void stop() {
-
-    }
-
-
-    @Override
-    public Map<String, Object> currentState() {
-        return new HashMap<String, Object>() {
-            {
-                put("personSpecificRecordLocatorMaps", personSpecificRecordLocatorMaps);
-            }
-        };
-    }
-
-    @Override
-    public void restoreState(Map<String, Object> state) {
-        personSpecificRecordLocatorMaps = (Map<String, Map<String, BeaconValueHolder>>)
-                state.get("personSpecificRecordLocatorMaps");
 
     }
 
@@ -261,20 +277,26 @@ public class GeoLocationApproximateStreamProcessor extends StreamFunctionProcess
     }
 
     @Override
-    protected List<Attribute> init(AbstractDefinition inputDefinition,
-                                   ExpressionExecutor[] attributeExpressionExecutors,
-                                   ConfigReader configReader,
-                                   SiddhiAppContext siddhiAppContext) {
+    protected StateFactory<ExtensionState> init(AbstractDefinition inputDefinition,
+                                                ExpressionExecutor[] attributeExpressionExecutors,
+                                                ConfigReader configReader,
+                                                boolean outputExpectsExpiredEvents,
+                                                SiddhiQueryContext siddhiQueryContext) {
         personSpecificRecordLocatorMaps = new ConcurrentHashMap<String, Map<String, BeaconValueHolder>>();
         if (attributeExpressionExecutors.length != 7) {
             throw new SiddhiAppValidationException("Invalid no of arguments passed to " +
                     "geo:locationApproximate() function, " +
                     "requires 7, but found " + attributeExpressionExecutors.length);
         }
-        ArrayList<Attribute> attributes = new ArrayList<Attribute>(3);
+        attributes = new ArrayList<Attribute>(3);
         attributes.add(new Attribute("averagedLatitude", Attribute.Type.DOUBLE));
         attributes.add(new Attribute("averagedLongitude", Attribute.Type.DOUBLE));
         attributes.add(new Attribute("averageExist", Attribute.Type.BOOL));
+        return null;
+    }
+
+    @Override
+    public List<Attribute> getReturnAttributes() {
         return attributes;
     }
 
@@ -307,5 +329,27 @@ public class GeoLocationApproximateStreamProcessor extends StreamFunctionProcess
         public double getLongitude() {
             return longitude;
         }
+    }
+
+    class ExtensionState extends State {
+
+        @Override
+        public boolean canDestroy() {
+            return false;
+        }
+
+        @Override
+        public Map<String, Object> snapshot() {
+            Map<String, Object> map = new HashMap<>();
+            map.put("personSpecificRecordLocatorMaps", personSpecificRecordLocatorMaps);
+            return map;
+        }
+
+        @Override
+        public void restore(Map<String, Object> state) {
+            personSpecificRecordLocatorMaps = (Map<String, Map<String, BeaconValueHolder>>)
+                    state.get("personSpecificRecordLocatorMaps");
+        }
+
     }
 }

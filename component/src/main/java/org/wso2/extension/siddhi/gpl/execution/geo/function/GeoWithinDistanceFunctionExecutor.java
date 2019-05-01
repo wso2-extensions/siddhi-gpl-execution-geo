@@ -17,17 +17,19 @@
 
 package org.wso2.extension.siddhi.gpl.execution.geo.function;
 
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.ReturnAttribute;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.Attribute;
 import org.wso2.extension.siddhi.gpl.execution.geo.internal.util.WithinDistanceOperation;
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.ReturnAttribute;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.query.api.definition.Attribute;
 
 /**
  * Calculate the geo is within the distance
@@ -96,15 +98,16 @@ public class GeoWithinDistanceFunctionExecutor extends AbstractGeoOperationExecu
      * The initialization method for FunctionExecutor, this method will be called before the other methods
      *
      * @param attributeExpressionExecutors are the executors of each function parameters
-     * @param siddhiAppContext             the context of the execution plan
+     * @param siddhiQueryContext             the context of the execution plan
      */
     @Override
-    protected void init(ExpressionExecutor[] attributeExpressionExecutors,
-                        ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
+    protected StateFactory<State> init(ExpressionExecutor[] attributeExpressionExecutors,
+                                       ConfigReader configReader, SiddhiQueryContext siddhiQueryContext) {
         this.geoOperation.init(attributeExpressionExecutors, 0, attributeExpressionExecutors.length);
         if (attributeExpressionExecutors[attributeExpressionExecutors.length - 1]
                 .getReturnType() != Attribute.Type.DOUBLE) {
             throw new SiddhiAppCreationException("Last argument should be a double");
         }
+        return null;
     }
 }
