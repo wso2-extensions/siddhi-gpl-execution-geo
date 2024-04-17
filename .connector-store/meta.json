@@ -10,5 +10,10 @@
         "siddhi-execution",
         "geo-gpl"
     ],
-    "releases": []
+    "releases": [
+        {
+            "tagName": "4.0.18",
+            "products": []
+        }
+    ]
 }
